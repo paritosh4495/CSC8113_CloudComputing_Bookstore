@@ -1,0 +1,44 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+
+version: '3'
+
+vars:
+    GOOS: "{{default OS .GOOS}}"
+    MVNW: '{{if eq .GOOS "windows"}}mvnw.cmd{{else}}./mvnw{{end}}'
+    DC_DIR: "deployment/docker-compose"
+    INFRA_DC_FILE: "{{.DC_DIR}}/infra.yml"
+#    APPS_DC_FILE: "{{.DC_DIR}}/apps.yml"
+#    SLEEP_CMD: '{{if eq .GOOS "windows"}}timeout{{else}}sleep{{end}}'
+
+
+tasks:
+  default:
+    cmds:
+      - task: test
+  test:
+    cmds:
+      - "{{.MVNW}} clean verify"
+
+
+  start_infra:
+    cmds:
+      - "docker compose -f {{.INFRA_DC_FILE}} up -d"
+
+  stop_infra:
+    cmds:
+      - "docker compose -f {{.INFRA_DC_FILE}} stop"
+      - "docker compose -f {{.INFRA_DC_FILE}} rm -f"
+
+  restart_infra:
+    cmds:
+      - task: stop_infra
+      - task: sleep
+      - task: start_infra
+
+
+  sleep:
+    vars:
+      DURATION: "{{default 5 .DURATION}}"
+    cmds:
+      - "{{.SLEEP_CMD}} {{.DURATION}}"
+
