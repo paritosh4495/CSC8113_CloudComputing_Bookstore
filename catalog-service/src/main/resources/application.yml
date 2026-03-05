@@ -15,7 +15,6 @@ spring:
       ddl-auto: validate
     open-in-view: false
 
-
 server:
   port: 8081
   shutdown: graceful
@@ -28,3 +27,7 @@ management:
   info:
     git:
       mode: full
+
+
+catalog:
+  page-size: 10

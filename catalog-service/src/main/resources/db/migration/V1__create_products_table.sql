@@ -11,10 +11,10 @@ CREATE TABLE products (
                           price NUMERIC NOT NULL CHECK (price >= 0.01),
                           genre TEXT,
                           publisher TEXT,
-                          publicationYear TIMESTAMP,
-                          stock_quantity INTEGER NOT NULL CHECK (stock_quantity >= 1),
+                          publication_year INTEGER,
+                          stock_quantity INTEGER NOT NULL CHECK (stock_quantity >= 0),
                           status TEXT NOT NULL DEFAULT 'AVAILABLE' CHECK (status IN ('AVAILABLE', 'OUT_OF_STOCK', 'DISCONTINUED')),
-                          created_at TIMESTAMP,
+                          created_at TIMESTAMP NOT NULL ,
                           updated_at TIMESTAMP,
                           version BIGINT NOT NULL DEFAULT 0, -- Version field for optimistic locking
                           PRIMARY KEY (id)
