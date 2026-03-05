@@ -163,10 +163,10 @@
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
                         </exclude>
-                        <image>
-                            <name>${dockerImageName}</name>
-                        </image>
                     </excludes>
+                    <image>
+                        <name>${dockerImageName}</name>
+                    </image>
                 </configuration>
                 <executions>
                     <execution>
