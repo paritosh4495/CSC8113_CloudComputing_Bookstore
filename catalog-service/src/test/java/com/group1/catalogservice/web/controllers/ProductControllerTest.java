@@ -502,6 +502,101 @@ class ProductControllerTest extends AbstractIT {
                         .body("totalElements", is(20));
             }
         }
+
+        @Nested
+        class StockManagementTest {
+
+            @Test
+            void shouldReserveStockSuccessfully() {
+                int initialStock = RestAssured.given()
+                        .when().get("/api/products/B001")
+                        .then().statusCode(200).extract().path("stockQuantity");
+
+                // Reserve 2 items
+                var payload = """
+                    {
+                      "quantity": 2
+                    }
+                    """;
+
+                RestAssured.given()
+                        .contentType(ContentType.JSON)
+                        .body(payload)
+                        .when()
+                        .post("/api/products/B001/reserve")
+                        .then()
+                        .statusCode(200);
+
+                // Verify stock decreased by 2
+                RestAssured.given()
+                        .when().get("/api/products/B001")
+                        .then()
+                        .statusCode(200)
+                        .body("stockQuantity", is(initialStock - 2));
+            }
+
+            @Test
+            void shouldReturnConflictWhenReservingMoreThanAvailableStock() {
+                var payload = """
+                    {
+                      "quantity": 99999
+                    }
+                    """;
+
+                RestAssured.given()
+                        .contentType(ContentType.JSON)
+                        .body(payload)
+                        .when()
+                        .post("/api/products/B001/reserve")
+                        .then()
+                        .statusCode(409)
+                        .body("title", containsString("Insufficient"));
+            }
+
+            @Test
+            void shouldReleaseStockSuccessfully() {
+                int initialStock = RestAssured.given()
+                        .when().get("/api/products/B001")
+                        .then().statusCode(200).extract().path("stockQuantity");
+
+                var payload = """
+                    {
+                      "quantity": 5
+                    }
+                    """;
+
+                RestAssured.given()
+                        .contentType(ContentType.JSON)
+                        .body(payload)
+                        .when()
+                        .post("/api/products/B001/release")
+                        .then()
+                        .statusCode(200);
+
+                RestAssured.given()
+                        .when().get("/api/products/B001")
+                        .then()
+                        .statusCode(200)
+                        .body("stockQuantity", is(initialStock + 5));
+            }
+
+            @Test
+            void shouldReturnBadRequestForInvalidQuantity() {
+                var payload = """
+                    {
+                      "quantity": 0
+                    }
+                    """;
+
+                RestAssured.given()
+                        .contentType(ContentType.JSON)
+                        .body(payload)
+                        .when()
+                        .post("/api/products/B001/reserve")
+                        .then()
+                        .statusCode(400); // Because @Min(1) validation fails
+            }
+        }
     }
 
 

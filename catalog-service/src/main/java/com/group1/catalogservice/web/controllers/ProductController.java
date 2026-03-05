@@ -116,5 +116,28 @@ public class ProductController {
         return ResponseEntity.ok(availability);
     }
 
+    @PostMapping("/{code}/reserve")
+    public ResponseEntity<Void> reserveStock(
+            @PathVariable String code,
+            @Valid @RequestBody StockUpdateRequestDTO request
+    ) {
+        productService.reserveStock(code, request.quantity());
+        return ResponseEntity.ok().build();
+    }
+
+
+    @PostMapping("/{code}/release")
+    public ResponseEntity<Void> releaseStock(
+            @PathVariable String code,
+            @Valid @RequestBody StockUpdateRequestDTO request
+    ) {
+        productService.releaseStock(code, request.quantity());
+        return ResponseEntity.ok().build();
+    }
+
+
+
+
+
 
 }
