@@ -3,6 +3,7 @@ package com.group1.cartservice.domain;
 import com.group1.cartservice.clients.catalog.ProductServiceClient;
 import com.group1.cartservice.clients.catalog.dtos.ProductAvailabilityDTO;
 import com.group1.cartservice.clients.catalog.dtos.ProductShortResponseDTO;
+import com.group1.cartservice.domain.exceptions.CartItemNotFoundException;
 import com.group1.cartservice.domain.exceptions.CartNotFoundException;
 import com.group1.cartservice.domain.exceptions.InsufficientStockException;
 import com.group1.cartservice.domain.exceptions.InvalidCartOperationException;
