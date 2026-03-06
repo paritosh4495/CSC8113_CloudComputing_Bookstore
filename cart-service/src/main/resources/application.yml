@@ -32,3 +32,34 @@ management:
 
 cart:
   page-size: 10
+  catalog-service-url: http://localhost:8081
+
+
+resilience4j:
+  retry:
+    backends:
+      catalog-retry:
+        max-attempts: 3
+        wait-duration: 1000ms
+        retry-exceptions:
+            - org.springframework.web.client.ResourceAccessException
+            - org.springframework.web.client.HttpServerErrorException
+        ignore-exceptions:
+              - org.springframework.web.client.HttpClientErrorException
+
+  circuitbreaker:
+    backends:
+      catalog-cb:
+          register-health-indicator: true
+          sliding-window-type: COUNT_BASED
+          sliding-window-size: 5             # Looks at the last 5 requests
+          failure-rate-threshold: 50         # If 50% (3 out of 5) fail, the breaker OPENS
+          wait-duration-in-open-state: 5s   # Waits 5 seconds before transitioning to HALF-OPEN to test the network
+          permitted-number-of-calls-in-half-open-state: 3
+          automatic-transition-from-open-to-half-open-enabled: true
+          record-exceptions:
+            - org.springframework.web.client.ResourceAccessException
+            - org.springframework.web.client.HttpServerErrorException
+          ignore-exceptions:
+            - org.springframework.web.client.HttpClientErrorException
+
