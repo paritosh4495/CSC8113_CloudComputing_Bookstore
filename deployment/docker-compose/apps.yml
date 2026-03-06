@@ -20,3 +20,24 @@ services:
       resources:
         limits:
           memory: 700m
+
+
+  cart-service:
+    image: paritosh4495/csc8113bookstore-cart-service
+    container_name: cart-service
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - CART_CATALOG_SERVICE_URL=http://catalog-service:8081
+      - DB_URL=jdbc:postgresql://cart-db:5432/cart_db
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+    ports:
+      - "8082:8082"
+    restart: unless-stopped
+    depends_on:
+      cart-db:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 700m

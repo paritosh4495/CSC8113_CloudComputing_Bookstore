@@ -2,8 +2,10 @@ package com.group1.cartservice;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
+import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeEach;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
@@ -29,9 +31,18 @@ public class AbstractIT {
     @InjectWireMock
     protected WireMockServer wireMockServer;
 
+
     @DynamicPropertySource
     static void configureProperties(DynamicPropertyRegistry registry) {
         registry.add("cart.catalog-service-url",() -> "http://localhost:${wiremock.server.port}");
+
+        // 1.  Disable retries so the 503 fallback triggers instantly
+        registry.add("resilience4j.retry.instances.catalog-retry.max-attempts", () -> 1);
+        registry.add("resilience4j.retry.instances.catalog-retry.wait-duration", () -> "10ms");
+
+        // 2. Make the sliding window massive so it never accidentally OPENS during other tests
+        registry.add("resilience4j.circuitbreaker.instances.catalog-cb.sliding-window-size", () -> 100);
+        registry.add("resilience4j.circuitbreaker.instances.catalog-cb.minimum-number-of-calls", () -> 100);
     }
 
     @BeforeEach

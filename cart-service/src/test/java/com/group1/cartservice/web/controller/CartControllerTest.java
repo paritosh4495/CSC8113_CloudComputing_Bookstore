@@ -128,6 +128,42 @@ class CartControllerTest extends AbstractIT {
 
         }
 
+        @Test
+        void shouldReturn400_whenProductCodeIsBlank() {
+            String requestBody = """
+                    {
+                      "productCode": "",
+                      "quantity": 1 
+                     }
+                    """;
+
+            RestAssured.given()
+                    .contentType(ContentType.JSON)
+                    .header("X-User-Id", "user-1")
+                    .body(requestBody)
+                    .when().post("/api/carts/items")
+                    .then().statusCode(400)
+                    .body("title", Matchers.is("Bad Request"));
+        }
+
+        @Test
+        void shouldReturn400_whenQuantityIsNegative() {
+
+            String requestBody = """
+                    {
+                      "productCode": "B001",
+                      "quantity": -1 
+                     }
+                    """;
+
+            RestAssured.given()
+                    .contentType(ContentType.JSON)
+                    .header("X-User-Id", "user-1")
+                    .body(requestBody)
+                    .when().post("/api/carts/items")
+                    .then().statusCode(400);
+        }
+
     }
 
 
@@ -180,6 +216,24 @@ class CartControllerTest extends AbstractIT {
                         .statusCode(200)
                         .body("items.find { it.id == 101 }.quantity", Matchers.is(1));
             }
+            @Test
+            void shouldReturn404_whenItemDoesNotBelongToCart() {
+
+                String requestBody = """
+                 {
+                  "quantity": 3
+                 }
+                 """;
+
+
+                RestAssured.given()
+                        .contentType(ContentType.JSON)
+                        .header("X-User-Id", "user-1")
+                        .body(requestBody)
+                        .when().put("/api/carts/items/99999")
+                        .then().statusCode(404)
+                        .body("title", Matchers.is("Resource Not Found"));
+            }
         }
 
         @Nested
@@ -195,7 +249,7 @@ class CartControllerTest extends AbstractIT {
                         .when()
                         .delete("/api/carts/items/{itemId}", 102)
                         .then()
-                        .statusCode(204); // 204 No Content for successful deletion
+                        .statusCode(204);
 
                 // Verify it's actually gone
                 RestAssured.given()
@@ -204,7 +258,7 @@ class CartControllerTest extends AbstractIT {
                         .get("/api/carts")
                         .then()
                         .statusCode(200)
-                        .body("items", Matchers.hasSize(1)); // Only item 101 should be left
+                        .body("items", Matchers.hasSize(1));
             }
         }
 
@@ -225,7 +279,40 @@ class CartControllerTest extends AbstractIT {
                         .body("totalItems", Matchers.is(3)) // 2 of B001 + 1 of B003
                         .body("totalPrice", Matchers.is(35.00f)); // (2 * 10.00) + (1 * 15.00)
             }
+
         }
+
+    @Nested
+    class ClearCartTest {
+
+        @Test
+        void shouldClearAllItemsFromCart() {
+            mockReleaseStockSuccess("B001");
+            mockReleaseStockSuccess("B003");
+
+            RestAssured.given()
+                    .header("X-User-Id", "user-1")
+                    .when().delete("/api/carts")
+                    .then().statusCode(204);
+
+            RestAssured.given()
+                    .header("X-User-Id", "user-1")
+                    .when().get("/api/carts")
+                    .then().statusCode(200)
+                    .body("items", Matchers.hasSize(0))
+                    .body("totalItems", Matchers.is(0));
+        }
+
+        @Test
+        void shouldReturn404_whenNoActiveCart() {
+            // brand-new-user has never created a cart — clearCart throws CartNotFoundException
+            RestAssured.given()
+                    .header("X-User-Id", "no-cart-user")
+                    .when().delete("/api/carts")
+                    .then().statusCode(404);
+        }
+    }
+
 
 
 
