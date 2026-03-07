@@ -1,10 +1,10 @@
-2026-03-07 10:20:28.527782Z jdbc[3]: exception
+2026-03-07 16:44:12.742948Z jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "MIGRATION_MODEL" not found (this database is empty); SQL statement:
 SELECT ID, VERSION FROM MIGRATION_MODEL ORDER BY UPDATE_TIME DESC [42104-230]
-2026-03-07 10:20:32.448971Z jdbc[4]: exception
+2026-03-07 16:44:14.258576Z jdbc[4]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "DATABASECHANGELOGLOCK" not found; SQL statement:
 SELECT COUNT(*) FROM PUBLIC.DATABASECHANGELOGLOCK [42102-230]
-2026-03-07 10:20:44.941288Z jdbc[3]: exception
+2026-03-07 16:44:18.929522Z jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Column "T.DETAILS_JSON" not found; SQL statement:
 select t.DETAILS_JSON from PUBLIC.ADMIN_EVENT_ENTITY t where 0=1 [42122-230]
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:514)
@@ -77,7 +77,6 @@ select t.DETAILS_JSON from PUBLIC.ADMIN_EVENT_ENTITY t where 0=1 [42122-230]
 	at org.keycloak.services.DefaultKeycloakSessionFactory.initializeProviders(DefaultKeycloakSessionFactory.java:165)
 	at org.keycloak.services.DefaultKeycloakSessionFactory.initializeProviders(DefaultKeycloakSessionFactory.java:165)
 	at org.keycloak.services.DefaultKeycloakSessionFactory.initializeProviders(DefaultKeycloakSessionFactory.java:165)
-	at org.keycloak.services.DefaultKeycloakSessionFactory.initializeProviders(DefaultKeycloakSessionFactory.java:165)
 	at org.keycloak.services.DefaultKeycloakSessionFactory.initProviderFactories(DefaultKeycloakSessionFactory.java:142)
 	at org.keycloak.services.DefaultKeycloakSessionFactory.initProviderFactories(DefaultKeycloakSessionFactory.java:126)
 	at org.keycloak.quarkus.runtime.integration.QuarkusKeycloakSessionFactory.init(QuarkusKeycloakSessionFactory.java:87)
@@ -116,7 +115,7 @@ select t.DETAILS_JSON from PUBLIC.ADMIN_EVENT_ENTITY t where 0=1 [42122-230]
 	at org.keycloak.quarkus.runtime.KeycloakMain.main(KeycloakMain.java:79)
 	at io.quarkus.bootstrap.runner.QuarkusEntryPoint.doRun(QuarkusEntryPoint.java:69)
 	at io.quarkus.bootstrap.runner.QuarkusEntryPoint.main(QuarkusEntryPoint.java:37)
-2026-03-07 10:20:45.432670Z jdbc[3]: exception
+2026-03-07 16:44:19.045340Z jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Column "T.REMEMBER_ME" not found; SQL statement:
 select t.REMEMBER_ME from PUBLIC.OFFLINE_USER_SESSION t where 0=1 [42122-230]
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:514)
@@ -185,7 +184,6 @@ select t.REMEMBER_ME from PUBLIC.OFFLINE_USER_SESSION t where 0=1 [42122-230]
 	at org.keycloak.quarkus.runtime.storage.database.jpa.QuarkusJpaConnectionProviderFactory.createOrUpdateSchema(QuarkusJpaConnectionProviderFactory.java:251)
 	at org.keycloak.quarkus.runtime.storage.database.jpa.QuarkusJpaConnectionProviderFactory.postInit(QuarkusJpaConnectionProviderFactory.java:124)
 	at org.keycloak.services.DefaultKeycloakSessionFactory.initializeProviders(DefaultKeycloakSessionFactory.java:168)
-	at org.keycloak.services.DefaultKeycloakSessionFactory.initializeProviders(DefaultKeycloakSessionFactory.java:165)
 	at org.keycloak.services.DefaultKeycloakSessionFactory.initializeProviders(DefaultKeycloakSessionFactory.java:165)
 	at org.keycloak.services.DefaultKeycloakSessionFactory.initializeProviders(DefaultKeycloakSessionFactory.java:165)
 	at org.keycloak.services.DefaultKeycloakSessionFactory.initializeProviders(DefaultKeycloakSessionFactory.java:165)

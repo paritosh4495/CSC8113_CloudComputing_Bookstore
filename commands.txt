@@ -1,3 +1,4 @@
 ./mvnw -pl catalog-service spring-boot:build-image -DskipTests
 ./mvnw -pl cart-service spring-boot:build-image -DskipTests
+./mvnw -pl api-gateway spring-boot:build-image -DskipTests
 
