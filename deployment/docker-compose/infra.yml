@@ -48,3 +48,26 @@ services:
         reservations:
           cpus: '0.25'
           memory: 256M
+
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.5.0
+    container_name: keycloak
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin1234
+    command: ["start-dev", "--http-port=9191"]
+    volumes:
+      - ./keycloak-data:/opt/keycloak/data
+    ports:
+      - "9191:9191"
+    healthcheck:
+      test: [ "CMD-SHELL", "exec 3<>/dev/tcp/127.0.0.1/9191" ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 2G
