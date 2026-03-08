@@ -19,6 +19,9 @@ public class SecurityConfig {
         converter.setJwtGrantedAuthoritiesConverter(new KeycloakRoleConverter());
         return converter;
     }
+
+
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -41,7 +44,7 @@ public class SecurityConfig {
 
                         // Swagger / actuator open
                         .requestMatchers(
-                                "/v3/api-docs",        
+                                "/v3/api-docs",
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
                                 "/actuator/**"

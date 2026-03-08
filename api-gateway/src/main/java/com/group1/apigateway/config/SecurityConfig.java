@@ -3,8 +3,6 @@ package com.group1.apigateway.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.oauth2.server.resource.authentication.ReactiveJwtAuthenticationConverter;
@@ -27,8 +25,9 @@ public class SecurityConfig {
 
                         .pathMatchers(
                                 "/swagger-ui.html",
+                                "/swagger-ui/**",
                                 "/webjars/**",
-                                "/v3/api-docs/**"          // covers /v3/api-docs/catalog and /v3/api-docs/cart
+                                "/v3/api-docs/**"
                         ).permitAll()
 
                         .pathMatchers(HttpMethod.GET, "/catalog/**").permitAll()

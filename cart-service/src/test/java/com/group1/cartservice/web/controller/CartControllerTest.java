@@ -9,10 +9,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.jdbc.Sql;
 
-
 import java.math.BigDecimal;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @Sql("/test-data.sql")
 class CartControllerTest extends AbstractIT {

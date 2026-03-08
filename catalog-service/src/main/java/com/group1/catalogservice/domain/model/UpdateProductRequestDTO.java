@@ -3,7 +3,6 @@ package com.group1.catalogservice.domain.model;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 
-
 import java.math.BigDecimal;
 
 public record UpdateProductRequestDTO(

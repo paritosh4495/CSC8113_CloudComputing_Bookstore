@@ -1,6 +1,5 @@
 package com.group1.apigateway.config;
 
-import org.springframework.boot.autoconfigure.task.TaskExecutionProperties;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

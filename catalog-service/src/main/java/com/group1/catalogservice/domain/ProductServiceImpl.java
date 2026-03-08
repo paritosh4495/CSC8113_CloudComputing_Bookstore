@@ -6,7 +6,6 @@ import com.group1.catalogservice.domain.exceptions.ProductAlreadyExistsException
 import com.group1.catalogservice.domain.exceptions.ProductNotFoundException;
 import com.group1.catalogservice.domain.mapper.ProductMapper;
 import com.group1.catalogservice.domain.model.*;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
