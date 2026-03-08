@@ -9,6 +9,13 @@ spring:
     username: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD:postgres}
 
+  spring:
+    security:
+      oauth2:
+        resourceserver:
+          jwt:
+            issuer-uri: ${KEYCLOAK_URL:http://localhost:9191}/realms/mylabs
+
   jpa:
     show-sql: true
     hibernate:

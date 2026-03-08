@@ -43,6 +43,9 @@ public class AbstractIT {
         // 2. Make the sliding window massive so it never accidentally OPENS during other tests
         registry.add("resilience4j.circuitbreaker.instances.catalog-cb.sliding-window-size", () -> 100);
         registry.add("resilience4j.circuitbreaker.instances.catalog-cb.minimum-number-of-calls", () -> 100);
+
+        registry.add("spring.security.oauth2.resourceserver.jwt.jwk-set-uri",
+                () -> "http://localhost/test-only-placeholder");
     }
 
     @BeforeEach

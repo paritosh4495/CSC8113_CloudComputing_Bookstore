@@ -37,7 +37,7 @@ public class ProductController {
         ProductDetailedResponseDTO product = productService.getProductByCode(code);
         return ResponseEntity.ok(product);
     }
-    
+
     @GetMapping("/search")
     public ResponseEntity<PageResult<ProductShortResponseDTO>> searchProducts(
             @RequestParam(required = false) String query,
@@ -57,25 +57,21 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<ProductDetailedResponseDTO> createProduct(
-            @RequestHeader(value = "X-User-Role", required = false) String userRole,
+
             @Valid @RequestBody CreateProductRequestDTO requestDTO
-            ){
-        if (!"ADMIN".equalsIgnoreCase(userRole)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
+    ){
+
         ProductDetailedResponseDTO createdProduct = productService.createProduct(requestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdProduct);
     }
-    
+
     @PutMapping("/{code}")
     public ResponseEntity<ProductDetailedResponseDTO> updateProduct(
-            @RequestHeader(value = "X-User-Role", required = false) String userRole,
+
             @PathVariable String code,
             @Valid @RequestBody UpdateProductRequestDTO requestDTO
     ) {
-        if (!"ADMIN".equalsIgnoreCase(userRole)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
+
         ProductDetailedResponseDTO updatedProduct = productService.updateProduct(code, requestDTO);
         return ResponseEntity.ok(updatedProduct);
     }
@@ -83,13 +79,11 @@ public class ProductController {
 
     @PatchMapping("/{code}/price")
     public ResponseEntity<ProductDetailedResponseDTO> updateProductPrice(
-            @RequestHeader(value = "X-User-Role", required = false) String userRole,
+
             @PathVariable String code,
             @RequestParam BigDecimal newPrice
     ) {
-        if (!"ADMIN".equalsIgnoreCase(userRole)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
+
         ProductDetailedResponseDTO updatedProduct = productService.updateProductPrice(code, newPrice);
         return ResponseEntity.ok(updatedProduct);
     }
@@ -97,12 +91,10 @@ public class ProductController {
 
     @DeleteMapping("/{code}")
     public ResponseEntity<Void> deleteProduct(
-            @RequestHeader(value = "X-User-Role", required = false) String userRole,
+
             @PathVariable String code
     ) {
-        if (!"ADMIN".equalsIgnoreCase(userRole)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
+
         productService.deleteProduct(code);
         return ResponseEntity.noContent().build();
     }
