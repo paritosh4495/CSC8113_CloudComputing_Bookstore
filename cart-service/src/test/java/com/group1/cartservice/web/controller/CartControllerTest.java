@@ -244,7 +244,7 @@ class CartControllerTest extends AbstractIT {
                 RestAssured.given()
                         .header("Authorization", "Bearer " + getToken("user-1"))
                         .when()
-                        .delete("/api/ca_rts/items/{itemId}", 102)
+                        .delete("/api/carts/items/{itemId}", 102)
                         .then()
                         .statusCode(204);
 
