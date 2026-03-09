@@ -2,7 +2,7 @@ spring:
   application:
     name: cart-service
 
-# DATABASE CONFIGURATION
+# DATABASE CONFIGURATION #
   datasource:
     driver-class-name: org.postgresql.Driver
     url: ${DB_URL:jdbc:postgresql://localhost:5432/cart}

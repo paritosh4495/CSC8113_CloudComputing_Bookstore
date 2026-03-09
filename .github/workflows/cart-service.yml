@@ -43,13 +43,13 @@ jobs:
       - if: ${{ github.ref == 'refs/heads/backend' }}
         name: Build and Push Docker Image
         run: |
-            
+          
           COMMIT_HASH=${GITHUB_SHA:0:7}
-               
-          ../mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=${{ env.DOCKER_IMAGE_NAME }}:$COMMIT_HASH -DskipTests
-               
+          
+          ../mvnw spring-boot:build-image -DskipTests -DdockerImageName=${{ env.DOCKER_IMAGE_NAME }}:$COMMIT_HASH
+          
           docker push ${{ env.DOCKER_IMAGE_NAME }}:$COMMIT_HASH
-               
+          
           docker tag ${{ env.DOCKER_IMAGE_NAME }}:$COMMIT_HASH ${{ env.DOCKER_IMAGE_NAME }}:latest
-               
+          
           docker push ${{ env.DOCKER_IMAGE_NAME }}:latest
