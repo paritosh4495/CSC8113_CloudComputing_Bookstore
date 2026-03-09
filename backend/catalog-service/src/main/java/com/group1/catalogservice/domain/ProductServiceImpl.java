@@ -34,6 +34,7 @@ class ProductServiceImpl implements ProductService {
         Pageable pageable = PageRequest.of(pageNo, applicationProperties.pageSize(), sort);
         Page<ProductShortResponseDTO> productPage = productRepository.findByStatusNot(Status.DISCONTINUED,pageable)
                 .map(productMapper::toProductShortResponseDTO);
+        System.out.println("GREEN VERSION V2 - ACTIVE !!!!!!");
 
         return new PageResult<>(
                 productPage.getContent(),
