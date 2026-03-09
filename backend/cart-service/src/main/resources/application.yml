@@ -5,7 +5,7 @@ spring:
 # DATABASE CONFIGURATION ##
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: ${DB_URL:jdbc:postgresql://localhost:25432/cart_db}
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/cart}
     username: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD:postgres}
 

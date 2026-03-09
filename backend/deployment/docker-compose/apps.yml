@@ -7,7 +7,7 @@ services:
     container_name: catalog-service
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - DB_URL=jdbc:postgresql://catalog-db:5432/catalog_db
+      - DB_URL=jdbc:postgresql://postgres-db:5432/catalog
       - DB_USERNAME=postgres
       - DB_PASSWORD=postgres
       - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://localhost:9191/realms/mylabs
@@ -16,7 +16,9 @@ services:
       - "8081:8081"
     restart: unless-stopped
     depends_on:
-      catalog-db:
+      postgres-db:
+        condition: service_healthy
+      keycloak:
         condition: service_healthy
     deploy:
       resources:
@@ -30,7 +32,7 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - CART_CATALOG_SERVICE_URL=http://catalog-service:8081
-      - DB_URL=jdbc:postgresql://cart-db:5432/cart_db
+      - DB_URL=jdbc:postgresql://postgres-db:5432/cart
       - DB_USERNAME=postgres
       - DB_PASSWORD=postgres
       - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://localhost:9191/realms/mylabs
@@ -39,7 +41,9 @@ services:
       - "8082:8082"
     restart: unless-stopped
     depends_on:
-      cart-db:
+      postgres-db:
+        condition: service_healthy
+      keycloak:
         condition: service_healthy
     deploy:
       resources:
@@ -59,6 +63,14 @@ services:
     ports:
       - "9000:9000"
     restart: unless-stopped
+    depends_on:
+      keycloak:
+        condition: service_healthy
+      catalog-service:
+        condition: service_started
+      cart-service:
+        condition: service_started
+
     deploy:
       resources:
         limits:
