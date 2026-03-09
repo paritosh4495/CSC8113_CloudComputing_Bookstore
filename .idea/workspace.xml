@@ -171,49 +171,49 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "JUnit.CartControllerTest$AddItemToCartTest.shouldAddItemToCartSuccessfully.executor": "Debug",
-    "JUnit.CartControllerTest.executor": "Debug",
-    "JUnit.CatalogServiceApplicationTests.executor": "Debug",
-    "JUnit.ProductControllerTest$CreateProductTest.executor": "Run",
-    "JUnit.ProductControllerTest$CreateProductTest.shouldReturnConflictForDuplicateIsbn.executor": "Run",
-    "JUnit.ProductControllerTest.executor": "Debug",
-    "Maven.CSC8113-bookstore-backend [clean,install].executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "Spring Boot.ApiGatewayApplication.executor": "Debug",
-    "Spring Boot.CartServiceApplication.executor": "Debug",
-    "Spring Boot.CatalogServiceApplication.executor": "Debug",
-    "Spring Boot.TestCartServiceApplication.executor": "Debug",
-    "Spring Boot.TestCatalogServiceApplication.executor": "Debug",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
-    "git-widget-placeholder": "backend",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "P:/Advanced Computer Science (ACS)/Semester 2/GroupProject/Technical_Part/CSC8113-bookstore-backend/cart-service/src/main/java/com/group1/cartservice/clients/catalog/dtos",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "run.configurations.included.in.services": "true",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;JUnit.CartControllerTest$AddItemToCartTest.shouldAddItemToCartSuccessfully.executor&quot;: &quot;Debug&quot;,
+    &quot;JUnit.CartControllerTest.executor&quot;: &quot;Debug&quot;,
+    &quot;JUnit.CatalogServiceApplicationTests.executor&quot;: &quot;Debug&quot;,
+    &quot;JUnit.ProductControllerTest$CreateProductTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ProductControllerTest$CreateProductTest.shouldReturnConflictForDuplicateIsbn.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ProductControllerTest.executor&quot;: &quot;Debug&quot;,
+    &quot;Maven.CSC8113-bookstore-backend [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;Spring Boot.ApiGatewayApplication.executor&quot;: &quot;Debug&quot;,
+    &quot;Spring Boot.CartServiceApplication.executor&quot;: &quot;Debug&quot;,
+    &quot;Spring Boot.CatalogServiceApplication.executor&quot;: &quot;Debug&quot;,
+    &quot;Spring Boot.TestCartServiceApplication.executor&quot;: &quot;Debug&quot;,
+    &quot;Spring Boot.TestCatalogServiceApplication.executor&quot;: &quot;Debug&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;backend&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;P:/Advanced Computer Science (ACS)/Semester 2/GroupProject/Technical_Part/CSC8113-bookstore-backend/cart-service/src/main/java/com/group1/cartservice/clients/catalog/dtos&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;run.configurations.included.in.services&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "postgresql",
-      "mysql_aurora"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;postgresql&quot;,
+      &quot;mysql_aurora&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
   </component>
@@ -265,7 +265,7 @@
       </map>
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.CartControllerTest">
+  <component name="RunManager" selected="Spring Boot.CartServiceApplication">
     <configuration name="CartControllerTest$AddItemToCartTest.shouldAddItemToCartSuccessfully" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="cart-service" />
       <extension name="coverage">
@@ -492,7 +492,7 @@
       <workItem from="1772876766262" duration="1413000" />
       <workItem from="1772878313642" duration="19988000" />
       <workItem from="1772964967382" duration="26806000" />
-      <workItem from="1773046240848" duration="4369000" />
+      <workItem from="1773046240848" duration="11169000" />
     </task>
     <servers />
   </component>

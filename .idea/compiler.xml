@@ -9,7 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="api-gateway" />
       </profile>
-      <profile name="Annotation profile for catalog-service" enabled="true">
+      <profile name="Annotation profile for CSC8113-bookstore-backend" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -22,9 +22,6 @@
         <module name="catalog-service" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="CSC8113-bookstore-backend" target="21" />
-    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">

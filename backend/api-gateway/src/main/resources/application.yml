@@ -40,7 +40,7 @@ spring:
                 - Path=/cart/**
               filters:
                 - RewritePath=/cart?(?<segment>.*), /api/carts${segment}
-                  # --- SWAGGER DOC ROUTES ----------
+                  # --- SWAGGER DOC ROUTES ---------------
             - id: openapi-catalog
               uri: ${CATALOG_SERVICE_URL:http://localhost:8081}
               predicates:
