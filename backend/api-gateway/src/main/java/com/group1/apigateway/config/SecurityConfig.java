@@ -35,6 +35,7 @@ public class SecurityConfig {
                         ).permitAll()
 
                         .pathMatchers(HttpMethod.GET, "/catalog/**").permitAll()
+                        .pathMatchers("/actuator/**").permitAll()
 
 
                         .pathMatchers(HttpMethod.POST, "/catalog/*/reserve").authenticated()
@@ -48,6 +49,7 @@ public class SecurityConfig {
 
 
                         .pathMatchers("/cart/**").authenticated()
+
 
 
                         .anyExchange().authenticated()

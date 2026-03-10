@@ -2,6 +2,15 @@ server:
   port: 9000
   shutdown: graceful
 
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: "*"
+    info:
+      git:
+        mode: full
+
 spring:
   application:
     name: api-gateway
