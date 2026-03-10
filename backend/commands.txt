@@ -10,3 +10,8 @@ minikube addons enable metrics-server
 
 
 kubectl create configmap keycloak-realm-config --from-file=realm.json=deployment/docker-compose/realm-export.json
+
+oc create configmap keycloak-realm-config --from-file=realm.json=realm-export.json
+
+
+kubectl apply -f k8s/

@@ -58,3 +58,15 @@ spec:
             limits:
               memory: "700Mi"
               cpu: "1000m"
+          livenessProbe:
+            httpGet:
+              path: "/actuator/health/liveness"
+              port: 8081
+            initialDelaySeconds: 60
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8081
+            initialDelaySeconds: 45
+            periodSeconds: 20

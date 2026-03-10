@@ -6,7 +6,7 @@ spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: catalog-service
+    name: catalog-service-blue
   minReplicas: 1
   maxReplicas: 8
   metrics:
