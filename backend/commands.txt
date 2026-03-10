@@ -46,11 +46,14 @@ kubectl apply -f k8s/
 a. kubectl apply -f secrets.yml
 b. kubectl apply -f postgres.yml
 c. kubectl rollout status statefulset/postgres --timeout=3m
-d. kubectl apply -f keycloak.yml
-e. kubectl rollout status deployment/keycloak --timeout=6m
-f. kubectl apply -f catalog-service.yml
-g. kubectl apply -f cart-service.yml
-h. kubectl apply -f api-gateway.yml
+
+d. kubectl create configmap keycloak-realm-config --from-file=realm.json=realm-export.json
+
+e. kubectl apply -f keycloak.yml
+f. kubectl rollout status deployment/keycloak --timeout=6m
+g. kubectl apply -f catalog-service.yml
+h. kubectl apply -f cart-service.yml
+i. kubectl apply -f api-gateway.yml
 
 // 6. Verifying the deployment and checking the status of the pods in the AKS Cluster
 kubectl get pods -n bookstore
@@ -58,3 +61,45 @@ kubectl get services -n bookstore
 
 // FOR HPA
 kubectl apply -f hpa.yml
+
+
+
+/// FOR SHUTTING CLUSTER DOWN
+az aks stop --resource-group bookstore-rg --name bookstore-cluster
+
+
+/// FOR STARTING CLUSTER UP
+az aks start --resource-group bookstore-rg --name bookstore-cluster
+
+
+
+Traffic spike hits catalog-service
+         │
+         ▼
+    HPA kicks in
+    Adds more PODS (up to 8)
+         │
+         │ if nodes are full...
+         ▼
+    Cluster Autoscaler kicks in
+    Adds more NODES (VMs, up to 4)
+         │
+         ▼
+    New pods get scheduled on new nodes
+         │
+         ▼
+    Traffic handled
+
+
+
+    Internet
+        │
+        ▼
+    9.223.64.113:9000  (api-gateway - LoadBalancer)
+        │
+        ├──► catalog-service:8081  (1→8 pods via HPA)
+        ├──► cart-service:8082
+        │
+        ▼
+    keycloak:9191  (auth)
+    postgres-db:5432  (database)
