@@ -37,3 +37,10 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+
+# Ignore local database volume data
+deployment/docker-compose/postgres-data/
+
+# Ignore IntelliJ IDEA settings
+.idea/

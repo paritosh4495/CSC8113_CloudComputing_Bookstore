@@ -37,7 +37,7 @@ class ProductServiceImpl implements ProductService {
         Pageable pageable = PageRequest.of(pageNo, applicationProperties.pageSize(), sort);
         Page<ProductShortResponseDTO> productPage = productRepository.findByStatusNot(Status.DISCONTINUED,pageable)
                 .map(productMapper::toProductShortResponseDTO);
-        System.out.println("GREEN VERSION V2 - ACTIVE !!!!!!");
+
 
         return new PageResult<>(
                 productPage.getContent(),
@@ -52,7 +52,6 @@ class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    @Cacheable(value = "product",key = "#code")
     public ProductDetailedResponseDTO getProductByCode(String code) {
         ProductDetailedResponseDTO productResponse =  productRepository.findByCodeAndStatusNot(code, Status.DISCONTINUED)
                 .map(productMapper::toProductDetailedResponseDTO)
@@ -87,7 +86,7 @@ class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    @CacheEvict(value = {"products", "product"}, allEntries = true)
+    @CacheEvict(value = "products", allEntries = true)
     public ProductDetailedResponseDTO createProduct(CreateProductRequestDTO request) {
         // Check if product with same isbn already exists
         if (productRepository.existsByIsbn(request.isbn())) {
@@ -104,7 +103,7 @@ class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    @CacheEvict(value = {"products", "product"}, key = "#code")
+    @CacheEvict(value = "products", allEntries = true)
     public ProductDetailedResponseDTO updateProduct(String code, UpdateProductRequestDTO request) {
         ProductEntity existingProduct = productRepository.findByCode(code)
                 .orElseThrow(() -> ProductNotFoundException.forCode(code));
@@ -119,6 +118,7 @@ class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "products", allEntries = true)
     public ProductDetailedResponseDTO updateProductPrice(String code, BigDecimal newPrice) {
         ProductEntity existingProduct = productRepository.findByCode(code)
                 .orElseThrow(() -> ProductNotFoundException.forCode(code));
@@ -130,6 +130,7 @@ class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "products", allEntries = true)
     public void deleteProduct(String code) {
         ProductEntity product = productRepository.findByCode(code)
                 .orElseThrow(() -> ProductNotFoundException.forCode(code));
