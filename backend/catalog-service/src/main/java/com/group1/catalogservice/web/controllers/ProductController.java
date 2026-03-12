@@ -148,12 +148,14 @@ public class ProductController {
 //        return ResponseEntity.ok(info);
 
 
+        // Green deployment
 
         Map<String,String> info = new HashMap<>();
         info.put("version", "v2.0 - GREEN");
         info.put("color", "GREEN");
         info.put("timestamp", Instant.now().toString());
         return ResponseEntity.ok(info);
+
 
     }
 
