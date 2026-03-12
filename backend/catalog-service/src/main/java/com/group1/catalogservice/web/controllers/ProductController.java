@@ -11,6 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @RestController
@@ -132,6 +135,27 @@ public class ProductController {
     ) {
         productService.releaseStock(code, request.quantity());
         return ResponseEntity.ok().build();
+    }
+
+    // Endpoint for visualizing Blue - Green deployment
+
+    @GetMapping("/version")
+    public ResponseEntity<Map<String,String>> getVersion() {
+        Map<String,String> info = new HashMap<>();
+        info.put("version", "v1.0 - BLUE");
+        info.put("color", "blue");
+        info.put("timestamp", Instant.now().toString());
+        return ResponseEntity.ok(info);
+
+        /**
+
+        Map<String,String> info = new HashMap<>();
+        info.put("version", "v2.0 - GREEN");
+        info.put("color", "GREEN");
+        info.put("timestamp", Instant.now().toString());
+        return ResponseEntity.ok(info);
+
+         **/
     }
 
 
