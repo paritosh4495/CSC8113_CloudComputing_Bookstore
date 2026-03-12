@@ -42,5 +42,7 @@ build/
 # Ignore local database volume data
 deployment/docker-compose/postgres-data/
 
+deployment/credentials
+
 # Ignore IntelliJ IDEA settings
 .idea/

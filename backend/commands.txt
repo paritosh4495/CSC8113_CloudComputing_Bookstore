@@ -83,6 +83,57 @@ k6 run --duration 3m --vus 50 load-test.js
 
 
 
+// ------------------------- AZURE BLOB STORAGE CREATION ------------------
+
+
+
+
+1. Take velero backup
+
+Syntax : velero backup create <name> --include-namespaces <namespace> --selector <label-selector>
+
+velero backup create postgres-backup --include-namespaces default --selector app=postgres
+
+2. Describe backup
+velero backup describe postgres-backup
+
+3. Delete everythig
+
+kubectl delete statefulset postgres
+kubectl delete pvc postgres-storage-postgres-0
+
+4. Verify
+kubectl get pods
+kubectl get pvc
+kubectl get svc
+
+5. Restore
+
+Syntax : velero restore create <name> --from-backup <backup-name>
+velero restore create postgres-restore --from-backup postgres-backup
+
+6. Describe restore
+velero restore describe postgres-restore
+
+7. Check if everything is back up and running
+kubectl get pods -w
+
+
+
+// Schedule backup
+velero schedule create postgres-daily-backup --schedule="0 2 * * *" --include-namespaces default --selector app=postgres
+
+// Describe schedule
+
+velero schedule get
+
+
+
+
+
+
+
+
 Traffic spike hits catalog-service
          │
          ▼
