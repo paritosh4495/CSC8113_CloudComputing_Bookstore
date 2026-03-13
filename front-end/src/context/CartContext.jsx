@@ -1,65 +1,140 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useContext, useState, useCallback, useEffect } from "react";
+import { useAuth } from "./AuthContext";
+import {
+  getCart,
+  addItemToCart,
+  updateCartItem,
+  deleteCartItem,
+  clearCart,
+} from "../Services/cartService";
 
 const CartContext = createContext(null);
-const STORAGE_KEY = "bookstore_cart_v1";
 
 export function CartProvider({ children }) {
-  const [items, setItems] = useState([]); // [{id,title,author,price,image,qty}]
+  const { user, keycloak, login } = useAuth();
 
-  useEffect(() => {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return;
+  const [cart,    setCart]    = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error,   setError]   = useState(null);
+
+  async function getToken() {
     try {
-      setItems(JSON.parse(raw));
+      await keycloak.updateToken(30);
     } catch {
-      localStorage.removeItem(STORAGE_KEY);
+      login();
+      throw new Error("Session expired — please log in again");
     }
-  }, []);
+    return keycloak.token;
+  }
 
+  const fetchCart = useCallback(async () => {
+    if (!user) return;
+    setLoading(true);
+    setError(null);
+    try {
+      const token = await getToken();
+      const data  = await getCart(token);
+      setCart(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }, [user]);
+
+  // ← Auto-fetch on login and page refresh
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-  }, [items]);
+    if (user) {
+      fetchCart();
+    } else {
+      setCart(null);
+    }
+  }, [user]);
 
-  const addItem = (book, qty = 1) => {
-    setItems((prev) => {
-      const idx = prev.findIndex((x) => x.id === book.id);
-      if (idx >= 0) {
-        const copy = [...prev];
-        copy[idx] = { ...copy[idx], qty: copy[idx].qty + qty };
-        return copy;
-      }
-      return [
-        ...prev,
-        {
-          id: book.id,
-          title: book.title,
-          author: book.author,
-          price: Number(book.price),
-          image: book.image,
-          qty,
-        },
-      ];
-    });
-  };
+  async function addItem(book, quantity = 1) {
+    if (!user) { login(); return; }
+    try {
+      const token = await getToken();
+      const data  = await addItemToCart(token, book.code, quantity);
+      setCart(data);
+    } catch (err) {
+      setError(err.message);
+    }
+  }
 
-  const removeItem = (id) => setItems((prev) => prev.filter((x) => x.id !== id));
-
-  const setQty = (id, qty) =>
-    setItems((prev) =>
-      prev.map((x) => (x.id === id ? { ...x, qty } : x)).filter((x) => x.qty > 0)
+ async function updateItem(itemId, quantity) {
+  if (!user) return;
+  // Update only the specific item locally — never replace whole cart
+  setCart((prev) => {
+    if (!prev) return prev;
+    const updatedItems = prev.items.map((i) =>
+      i.id === itemId
+        ? { ...i, quantity, subTotal: i.unitPrice * quantity }
+        : i
     );
+    const totalPrice = updatedItems.reduce((sum, i) => sum + i.subTotal, 0);
+    const totalItems = updatedItems.reduce((sum, i) => sum + i.quantity, 0);
+    return { ...prev, items: updatedItems, totalPrice, totalItems };
+  });
 
-  const clear = () => setItems([]);
+  // Fire API in background — no setCart on response
+  try {
+    const token = await getToken();
+    await updateCartItem(token, itemId, quantity);
+  } catch (err) {
+    setError(err.message);
+    fetchCart(); // only re-fetch to recover on error
+  }
+}
 
-  const count = useMemo(() => items.reduce((s, x) => s + x.qty, 0), [items]);
-  const total = useMemo(() => items.reduce((s, x) => s + x.price * x.qty, 0), [items]);
 
-  const value = useMemo(
-    () => ({ items, addItem, removeItem, setQty, clear, count, total }),
-    [items, count, total]
+  async function removeItem(itemId) {
+    if (!user) return;
+    // Optimistic update for snappy UI
+    setCart((prev) => {
+      if (!prev) return prev;
+      const updated = prev.items.filter((i) => i.id !== itemId);
+      const totalPrice = updated.reduce((sum, i) => sum + i.subTotal, 0);
+      return { ...prev, items: updated, totalItems: updated.length, totalPrice };
+    });
+    try {
+      const token = await getToken();
+      await deleteCartItem(token, itemId);
+      fetchCart(); // sync with backend after delete
+    } catch (err) {
+      setError(err.message);
+      fetchCart(); // recover on error
+    }
+  }
+
+  async function emptyCart() {
+    if (!user) return;
+    try {
+      const token = await getToken();
+      await clearCart(token);
+      setCart((prev) => prev ? { ...prev, items: [], totalItems: 0, totalPrice: 0 } : prev);
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+
+  const count = cart?.totalItems ?? 0;
+
+  return (
+    <CartContext.Provider value={{
+      cart,
+      count,
+      loading,
+      error,
+      fetchCart,
+      addItem,
+      updateItem,
+      removeItem,
+      emptyCart,
+    }}>
+      {children}
+    </CartContext.Provider>
   );
-
-  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }
 
 export function useCart() {
