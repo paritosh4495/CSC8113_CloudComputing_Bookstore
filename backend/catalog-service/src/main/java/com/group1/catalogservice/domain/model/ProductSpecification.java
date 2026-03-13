@@ -26,30 +26,33 @@ public class ProductSpecification {
 
             predicates.add(cb.notEqual(root.get("status"),Status.DISCONTINUED));
 
-            if(query !=null && !query.isBlank()){
+            if (query != null && !query.isBlank()) {
                 String likeQuery = "%" + query.toLowerCase() + "%";
                 predicates.add(cb.or(
-                        cb.like(cb.lower(root.get("name")),likeQuery),
-                        cb.like(cb.lower(root.get("description")),likeQuery)
+                        cb.like(cb.lower(root.get("name")),        likeQuery),
+                        cb.like(cb.lower(root.get("description")), likeQuery),
+                        cb.like(cb.lower(root.get("author")),      likeQuery),
+                        cb.like(cb.lower(root.get("isbn")),        likeQuery)
                 ));
             }
-            if(genre !=null && !genre.isBlank()){
-                predicates.add(cb.equal(cb.lower(root.get("genre")),genre.toLowerCase()));
+            if (genre != null && !genre.isBlank()) {
+                predicates.add(cb.equal(cb.lower(root.get("genre")), genre.toLowerCase()));
             }
-            if(author !=null && !author.isBlank()){
+            if (author != null && !author.isBlank()) {
                 predicates.add(cb.like(cb.lower(root.get("author")), "%" + author.toLowerCase() + "%"));
             }
-            if(name !=null && !name.isBlank()) {
+            if (name != null && !name.isBlank()) {
                 predicates.add(cb.like(cb.lower(root.get("name")), "%" + name.toLowerCase() + "%"));
             }
-            if(isbn !=null && !isbn.isBlank()){
-                predicates.add(cb.equal(root.get("isbn"),isbn));
+            if (isbn != null && !isbn.isBlank()) {
+                predicates.add(cb.equal(root.get("isbn"), isbn));
             }
-            if(minPrice !=null) {
-                predicates.add(cb.greaterThanOrEqualTo(root.get("price"), minPrice));
 
+            if (minPrice != null) {
+                predicates.add(cb.greaterThanOrEqualTo(root.get("price"), minPrice));
             }
-            if(maxPrice !=null) {
+
+            if (maxPrice != null) {
                 predicates.add(cb.lessThanOrEqualTo(root.get("price"), maxPrice));
             }
             return  cb.and(predicates.toArray(new Predicate[0]));
