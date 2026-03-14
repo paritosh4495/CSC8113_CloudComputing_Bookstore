@@ -34,6 +34,22 @@ public class SecurityConfig {
                                 "/v3/api-docs/**"
                         ).permitAll()
 
+                        .pathMatchers(
+                                "/",
+                                "/index.html",
+                                "/assets/**",
+                                "/static/**",
+                                "/*.js",
+                                "/*.css",
+                                "/*.ico",
+                                "/*.png",
+                                "/*.svg",
+                                "/*.webp",
+                                "/*.woff",
+                                "/*.woff2"
+                        ).permitAll()
+
+
                         .pathMatchers(HttpMethod.GET, "/catalog/**").permitAll()
                         .pathMatchers("/actuator/**").permitAll()
 
