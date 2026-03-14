@@ -5,6 +5,29 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>bookstore-frontend</title>
+    <script>
+      (function() {
+        if (location.hostname === 'localhost') return; // not needed locally
+        
+        // 1. Convince browser this is a secure context
+        if (!window.isSecureContext) {
+          Object.defineProperty(window, 'isSecureContext', {
+            get: function() { return true; },
+            configurable: true
+          });
+        }
+        
+        // 2. Provide a minimal crypto.subtle shim
+        //    keycloak-js v26 checks its EXISTENCE but with pkceMethod:false
+        //    only uses crypto.getRandomValues (available on HTTP natively)
+        if (window.crypto && !window.crypto.subtle) {
+          Object.defineProperty(window.crypto, 'subtle', {
+            get: function() { return {}; },
+            configurable: true
+          });
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
