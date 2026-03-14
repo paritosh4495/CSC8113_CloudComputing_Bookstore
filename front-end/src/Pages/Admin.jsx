@@ -9,8 +9,8 @@ import {
   adminDeleteProduct,
   adminUpdatePrice,
   adminCheckAvailability,
-  adminGetVersion,
 } from "../Services/adminService";
+
 
 const STATUS_COLORS = {
   AVAILABLE: { color: "#15803d", bg: "#dcfce7" },
@@ -317,7 +317,6 @@ export default function Admin() {
   const [products, setProducts] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
   const [page, setPage] = useState(1);
-  const [version, setVersion] = useState(null);
   const [loading, setLoading] = useState(false);
   const [actionBusy, setActionBusy] = useState(null);
 
@@ -374,11 +373,6 @@ export default function Admin() {
     loadProducts();
   }, [loadProducts]);
 
-  useEffect(() => {
-    token()
-      .then((t) => adminGetVersion(t).then(setVersion))
-      .catch(() => {});
-  }, []);
 
   // ── Actions ──────────────────────────────────────────────────────────────
 

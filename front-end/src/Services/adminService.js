@@ -6,17 +6,13 @@ const authHeaders = (token) => ({
 });
 
 export async function adminGetAllProducts(token, page = 1) {
-  const res = await fetch(`${API.catalog}?page=${page}`, {
-    headers: authHeaders(token),
-  });
+  const res = await fetch(`${API.catalog}?page=${page}`, { headers: authHeaders(token) });
   if (!res.ok) throw new Error("Failed to fetch products");
   return res.json();
 }
 
 export async function adminGetProduct(token, code) {
-  const res = await fetch(`${API.catalog}/${code}`, {
-    headers: authHeaders(token),
-  });
+  const res = await fetch(`${API.catalog}/${code}`, { headers: authHeaders(token) });
   if (!res.ok) throw new Error("Failed to fetch product");
   return res.json();
 }
@@ -59,17 +55,7 @@ export async function adminUpdatePrice(token, code, newPrice) {
 }
 
 export async function adminCheckAvailability(token, code) {
-  const res = await fetch(`${API.catalog}/${code}/availability`, {
-    headers: authHeaders(token),
-  });
+  const res = await fetch(`${API.catalog}/${code}/availability`, { headers: authHeaders(token) });
   if (!res.ok) throw new Error("Failed to check availability");
-  return res.json();
-}
-
-export async function adminGetVersion(token) {
-  const res = await fetch(`${API.catalog}/version`, {
-    headers: authHeaders(token),
-  });
-  if (!res.ok) throw new Error("Failed to fetch version");
   return res.json();
 }
