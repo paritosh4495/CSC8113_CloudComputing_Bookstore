@@ -86,6 +86,7 @@ class CartServiceImpl implements CartService {
             newItem.setProductCode(request.productCode());
             newItem.setProductName(productInfo.name());
             newItem.setPrice(productInfo.price());
+            newItem.setImageUrl(productInfo.imageUrl());
             newItem.setQuantity(request.quantity());
             newItem.setCart(cartEntity);
             cartEntity.addItem(newItem);

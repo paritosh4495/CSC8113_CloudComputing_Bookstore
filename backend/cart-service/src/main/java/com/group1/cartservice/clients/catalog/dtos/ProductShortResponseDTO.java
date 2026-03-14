@@ -6,6 +6,7 @@ public record ProductShortResponseDTO(
         String code,
         String name,
         BigDecimal price,
+        String imageUrl,
         Status status
 ) {
 }

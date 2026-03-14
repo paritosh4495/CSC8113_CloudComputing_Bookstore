@@ -85,6 +85,73 @@ k6 run --duration 3m --vus 50 load-test.js
 
 // ------------------------- AZURE BLOB STORAGE CREATION ------------------
 
+$env:AZURE_RESOURCE_GROUP="bookstore-rg"
+ $env:AZURE_STORAGE_ACCOUNT_NAME="bookstorevelero12"
+ $env:BLOB_CONTAINER="velero-backups"
+ $env:AZURE_REGION="swedencentral"
+ az storage account create --name $AZURE_STORAGE_ACCOUNT_NAME --resource-group $AZURE_RESOURCE_GROUP --location $AZURE_REGION --sku Standard_GRS
+
+
+# CREATE storage account
+
+az storage account create --name bookstorevelero12 --resource-group bookstore-rg --location swedencentral --sku Standard_GRS
+
+# CREATE blob container
+
+az storage container create --name velero-backups --account-name bookstorevelero12
+
+# Get Azure Credentials
+
+az account show --query "{subscriptionId:id, tenantId:tenantId}" -o table
+
+# Create a service principal and assign it "Contributor" role to the storage account
+
+az ad sp create-for-rbac --name "velero-sp" --role "Contributor" --scopes /subscriptions/<subscription-id> --output json
+
+# Create a secret file with the AZURE Credentials
+
+@"
+AZURE_SUBSCRIPTION_ID=<subscription-id> AZURE_TENANT_ID=<tenant-id> AZURE_CLIENT_ID=<client-id> AZURE_CLIENT_SECRET=<> AZURE_RESOURCE_GROUP=<resource-group-name> AZURE_CLOUD_NAME=AzurePublicCloud
+"@ | Out-File -FilePath azure-credentials.txt -Encoding ascii
+
+# Verify
+az account show
+
+# Get storage account name and Rg name
+az storage account list --query "[].{name:name, rg:resourceGroup}" -o table
+
+# Install velero locally
+choco install velero
+
+# Install velero on cluster
+velero install --provider azure --plugins velero/velero-plugin-for-microsoft-azure:v1.11.0 --bucket velero-backups --secret-file ./credentials-velero.txt --backup-location-config resourceGroup=bookstore-rg,storageAccount=bookstorevelero12,storageAccountKeyEnvVar=AZURE_STORAGE_ACCOUNT_ACCESS_KEY --use-volume-snapshots=false --wait
+
+# Verify
+kubectl get pods -n velero
+velero backup-location get
+
+# Create Daily Backup Schedule
+velero schedule create postgres-daily-backup  --schedule="0 2 * * *" --include-namespaces default  --ttl 720h0m0s
+
+# Describe schedule
+velero schedule get
+
+# Take a manual backup
+velero backup create postgres-manual-backup --include-namespaces default --wait
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

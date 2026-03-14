@@ -38,6 +38,9 @@ public class CartItemEntity {
     @Column(nullable = false)
     private int quantity;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
     @Column(nullable = false)
     private BigDecimal price;
 

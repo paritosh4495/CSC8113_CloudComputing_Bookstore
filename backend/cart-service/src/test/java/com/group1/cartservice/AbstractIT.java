@@ -68,6 +68,7 @@ public class AbstractIT {
                                     "code": "%s",
                                     "name": "%s",
                                     "price": %f
+                           
                                 }
                         """.formatted(code,name,price.doubleValue()))));
 

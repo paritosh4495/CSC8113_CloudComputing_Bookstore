@@ -18,6 +18,7 @@ CREATE TABLE cart_items (
                  product_code TEXT NOT NULL,
                  product_name TEXT NOT NULL,
                  quantity INTEGER NOT NULL CHECK (quantity >= 1),
+                 image_url TEXT,
                  price NUMERIC NOT NULL CHECK (price >= 0.01),
                  created_at TIMESTAMP NOT NULL,
                  updated_at TIMESTAMP,
