@@ -1,4 +1,9 @@
-import { Link, useNavigate, createSearchParams, useSearchParams } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+  createSearchParams,
+  useSearchParams,
+} from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
@@ -18,9 +23,21 @@ function BrandLogo() {
   return (
     <div className="brand-mark" aria-hidden="true">
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
-        <path d="M4 6.5C4 5.67 4.67 5 5.5 5H18a2 2 0 0 1 2 2v10.5a.5.5 0 0 1-.8.4C18.13 17.1 16.88 16.5 15 16.5H6.5A2.5 2.5 0 0 0 4 19V6.5Z" fill="currentColor" opacity="0.18" />
-        <path d="M6.5 5H18a2 2 0 0 1 2 2v10.5a.5.5 0 0 1-.8.4C18.13 17.1 16.88 16.5 15 16.5H6.5A2.5 2.5 0 0 0 4 19V7.5A2.5 2.5 0 0 1 6.5 5Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
-        <path d="M8 8.5h8M8 11h8M8 13.5h5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+        {/* Bottom book */}
+        <rect x="3" y="16" width="18" height="3" rx="1.5"
+          fill="currentColor" opacity="0.25" />
+        {/* Middle book */}
+        <rect x="3" y="11" width="18" height="4" rx="1.5"
+          fill="currentColor" opacity="0.55" />
+        {/* Spine line middle */}
+        <line x1="7" y1="11" x2="7" y2="15"
+          stroke="white" strokeWidth="1.2" opacity="0.6" />
+        {/* Top book */}
+        <rect x="3" y="5" width="18" height="5" rx="1.5"
+          fill="currentColor" />
+        {/* Spine line top */}
+        <line x1="7" y1="5" x2="7" y2="10"
+          stroke="white" strokeWidth="1.2" opacity="0.7" />
       </svg>
     </div>
   );
@@ -29,7 +46,13 @@ function BrandLogo() {
 function CartIcon() {
   return (
     <svg viewBox="0 0 24 24" width="20" height="20" fill="none">
-      <path d="M3 4h2l1.2 7.2A2 2 0 0 0 8.18 13H17a2 2 0 0 0 1.95-1.55L20 7H7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      <path
+        d="M3 4h2l1.2 7.2A2 2 0 0 0 8.18 13H17a2 2 0 0 0 1.95-1.55L20 7H7"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
       <circle cx="9" cy="19" r="1.6" fill="currentColor" />
       <circle cx="17" cy="19" r="1.6" fill="currentColor" />
     </svg>
@@ -40,7 +63,12 @@ function SearchIcon() {
   return (
     <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
       <circle cx="11" cy="11" r="6.5" stroke="currentColor" strokeWidth="1.8" />
-      <path d="M16 16l4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      <path
+        d="M16 16l4 4"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
@@ -93,13 +121,15 @@ export default function Navbar() {
         <Link to="/" className="brand" aria-label="Go to homepage">
           <BrandLogo />
           <div className="brand-copy">
-            <span className="brand-title">CloudLeaf Books</span>
+            <span className="brand-title">G1 Bookstore</span>
             <span className="brand-subtitle">Smart bookstore</span>
           </div>
         </Link>
 
         <form className="nav-search" onSubmit={handleSubmit} role="search">
-          <span className="nav-search-icon"><SearchIcon /></span>
+          <span className="nav-search-icon">
+            <SearchIcon />
+          </span>
           <input
             type="search"
             placeholder="Search books, authors, ISBN..."
@@ -118,7 +148,11 @@ export default function Navbar() {
               </Link>
 
               <div className="profile-wrap" title={username}>
-                <Link to="/admin" className="profile-chip" aria-label={username}>
+                <Link
+                  to="/admin"
+                  className="profile-chip"
+                  aria-label={username}
+                >
                   <span className="profile-avatar">{initials}</span>
                 </Link>
                 <div className="profile-tooltip">{username}</div>

@@ -16,40 +16,31 @@ function buildUser(kc) {
 }
 
 export function AuthProvider({ children }) {
-  const [user, setUser]       = useState(null);
+  const [user,    setUser]    = useState(null);
   const [loading, setLoading] = useState(true);
-  const initialized           = useRef(false);     // ← guard
+  const initialized           = useRef(false);
 
   useEffect(() => {
-  if (initialized.current) return;
-  initialized.current = true;
+    if (initialized.current) return;
+    initialized.current = true;
 
-  // ← Set handlers BEFORE init(), so they catch the post-redirect callback
-  keycloak.onAuthSuccess  = () => setUser(buildUser(keycloak));
-  keycloak.onAuthLogout   = () => setUser(null);
-  keycloak.onTokenExpired = () =>
-    keycloak.updateToken(30).catch(() => setUser(null));
+    keycloak.onAuthSuccess  = () => setUser(buildUser(keycloak));
+    keycloak.onAuthLogout   = () => setUser(null);
+    keycloak.onTokenExpired = () =>
+      keycloak.updateToken(30).catch(() => setUser(null));
 
-  keycloak
-    .init({
-      onLoad: "check-sso",
-      checkLoginIframe: false,
-      pkceMethod: "S256",
-    })
-    .then((authenticated) => {
-      if (authenticated) {
-        setUser(buildUser(keycloak));
-      } else {
-        setLoading(false);
-      }
-    })
-    .catch((err) => {
-      console.error("Keycloak init failed:", err);
-      setLoading(false);
-    })
-    .finally(() => setLoading(false));
-}, []);
-
+    keycloak
+      .init({
+        onLoad: "check-sso",
+        checkLoginIframe: false,
+        pkceMethod: "S256",
+      })
+      .then((authenticated) => {
+        if (authenticated) setUser(buildUser(keycloak));
+      })
+      .catch((err) => console.error("Keycloak init failed:", err))
+      .finally(() => setLoading(false));
+  }, []);
 
   const login  = () => keycloak.login();
   const logout = () => keycloak.logout({ redirectUri: window.location.origin });
