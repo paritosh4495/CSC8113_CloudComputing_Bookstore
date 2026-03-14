@@ -24,7 +24,6 @@ function AdminRedirect() {
   const location  = useLocation();
 
   useEffect(() => {
-    // Only redirect if admin AND not already on /admin
     if (user?.roles.includes("admin") && location.pathname !== "/admin") {
       navigate("/admin", { replace: true });
     }

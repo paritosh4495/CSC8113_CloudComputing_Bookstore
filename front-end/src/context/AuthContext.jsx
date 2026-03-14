@@ -31,7 +31,7 @@ export function AuthProvider({ children }) {
 
     keycloak
       .init({
-        onLoad: "check-sso",
+        onLoad: undefined,
         checkLoginIframe: false,
         pkceMethod: "S256",
       })
