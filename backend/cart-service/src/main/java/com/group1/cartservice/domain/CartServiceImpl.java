@@ -69,7 +69,7 @@ class CartServiceImpl implements CartService {
             throw new InsufficientStockException("Insufficient stock for product code: " + request.productCode());
         }
         // Reserve
-        productService.reserveStock(request.productCode(), request.quantity());
+//        productService.reserveStock(request.productCode(), request.quantity());
 
         // Add Item to Cart
         // Find the item if it already exists in the cart, if yes then update the quantity, else add new item
@@ -110,7 +110,7 @@ class CartServiceImpl implements CartService {
             // Remove Item from Cart
             cartEntity.removeItem(item);
             // Release Reserved Stock
-            productService.releaseStock(item.getProductCode(), item.getQuantity());
+//            productService.releaseStock(item.getProductCode(), item.getQuantity());
         }
         else {
             // Check Availability
@@ -123,11 +123,11 @@ class CartServiceImpl implements CartService {
                     throw new InsufficientStockException("Insufficient stock for product code: " + item.getProductCode());
                 }
                 // Reserve Additional Stock
-                productService.reserveStock(item.getProductCode(), quantityDifference);
+//                productService.reserveStock(item.getProductCode(), quantityDifference);
             }
             else if(quantityDifference < 0){
                 // Release Excess Stock
-                productService.releaseStock(item.getProductCode(), -quantityDifference);
+//                productService.releaseStock(item.getProductCode(), -quantityDifference);
             }
             item.setQuantity(request.quantity());
         }
@@ -151,7 +151,7 @@ class CartServiceImpl implements CartService {
         // 3. Remove Item from Cart
         cartEntity.removeItem(item);
         // 4. Release Reserved Stock
-        productService.releaseStock(item.getProductCode(), item.getQuantity());
+//        productService.releaseStock(item.getProductCode(), item.getQuantity());
         cartRepository.save(cartEntity);
 
     }
@@ -163,9 +163,9 @@ class CartServiceImpl implements CartService {
         CartEntity cartEntity = cartRepository.findByUserIdAndStatus(userId, CartStatus.ACTIVE)
                 .orElseThrow(()-> new CartNotFoundException("Active cart not found for user ID: " + userId));
         // 2. Release Reserved Stock for all items in the cart
-        cartEntity.getItems().forEach(item -> {
-            productService.releaseStock(item.getProductCode(), item.getQuantity());
-        });
+//        cartEntity.getItems().forEach(item -> {
+//          productService.releaseStock(item.getProductCode(), item.getQuantity());
+//        });
         // 3. Clear Cart Items
         cartEntity.getItems().clear();
         cartRepository.save(cartEntity);

@@ -75,3 +75,21 @@ services:
       resources:
         limits:
           memory: 700m
+
+
+
+
+  frontend:
+    image: paritosh4495/csc8113bookstore-frontend
+    container_name: frontend
+    ports:
+      - "5173:80"
+    volumes:
+      - ./config.js:/usr/share/nginx/html/config.js:ro
+    restart: unless-stopped
+    depends_on:
+      - api-gateway
+    deploy:
+      resources:
+        limits:
+          memory: 100m

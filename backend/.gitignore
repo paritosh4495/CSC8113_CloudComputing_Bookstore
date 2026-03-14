@@ -46,3 +46,5 @@ deployment/credentials
 
 # Ignore IntelliJ IDEA settings
 .idea/
+
+deployment/docker-compose/config.js
