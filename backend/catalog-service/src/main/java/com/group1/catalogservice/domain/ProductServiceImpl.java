@@ -162,6 +162,7 @@ class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "products", allEntries = true)
     public void reserveStock(String code, int quantity) {
         ProductEntity product = productRepository.findByCodeAndStatusNot(
                 code, Status.DISCONTINUED
@@ -180,6 +181,7 @@ class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "products", allEntries = true)
     public void releaseStock(String code, int quantity) {
         ProductEntity product = productRepository.findByCodeAndStatusNot(
                 code, Status.DISCONTINUED
