@@ -193,6 +193,22 @@ velero schedule create postgres-daily-backup --schedule="0 2 * * *" --include-na
 
 velero schedule get
 
+// Velero reinstall with Azure Blob Storage
+
+velero uninstall --force
+
+velero install `
+  --provider azure `
+  --plugins velero/velero-plugin-for-microsoft-azure:v1.11.0 `
+  --bucket velero-backups `
+  --secret-file ./credentials-velero.txt `
+  --backup-location-config resourceGroup=bookstore-rg,storageAccount=bookstorevelero12,storageAccountKeyEnvVar=AZURE_STORAGE_ACCOUNT_ACCESS_KEY `
+  --use-volume-snapshots=false `
+  --wait
+
+
+
+
 
 
 
