@@ -1,0 +1,78 @@
+---
+# 1. The Service: Creates the internal network address 'catalog-service'
+apiVersion: v1
+kind: Service
+metadata:
+  name: catalog-service
+spec:
+  selector:
+    app: catalog-service
+    color: blue
+  ports:
+    - port: 8081
+      targetPort: 8081
+
+---
+# 2. The Deployment: Manages the Spring Boot Pod
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalog-service-blue
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: catalog-service
+      color: blue
+  template:
+    metadata:
+      labels:
+        app: catalog-service
+        color: blue
+    spec:
+      containers:
+        - name: catalog-service
+
+          image: paritosh4495/csc8113bookstore-catalog-service:latest
+          imagePullPolicy: Always
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "docker"
+            - name: DB_URL
+              value: "jdbc:postgresql://postgres-db:5432/catalog"
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: password
+            - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
+              value: "https://4.225.128.203/auth/realms/mylabs"
+            - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI
+              value: "http://keycloak:9191/auth/realms/mylabs/protocol/openid-connect/certs"
+
+          ports:
+            - containerPort: 8081
+          resources:
+            requests:
+              memory: "500Mi"
+              cpu: "250m"
+            limits:
+              memory: "700Mi"
+              cpu: "1000m"
+          livenessProbe:
+            httpGet:
+              path: "/actuator/health/liveness"
+              port: 8081
+            initialDelaySeconds: 60
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8081
+            initialDelaySeconds: 45
+            periodSeconds: 20

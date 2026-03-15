@@ -1,0 +1,79 @@
+spring:
+  application:
+    name: cart-service
+
+# DATABASE CONFIGURATION #
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/cart}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
+
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_URL:http://localhost:9191}/realms/mylabs
+
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+
+server:
+  shutdown: graceful
+  port: 8082
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+  info:
+    git:
+      mode: full
+
+
+cart:
+  page-size: 10
+  catalog-service-url: http://localhost:8081
+
+
+resilience4j:
+  retry:
+    backends:
+      catalog-retry:
+        max-attempts: 3
+        wait-duration: 1000ms
+        retry-exceptions:
+            - org.springframework.web.client.ResourceAccessException
+            - org.springframework.web.client.HttpServerErrorException
+        ignore-exceptions:
+              - org.springframework.web.client.HttpClientErrorException
+
+  circuitbreaker:
+    backends:
+      catalog-cb:
+          register-health-indicator: true
+          sliding-window-type: COUNT_BASED
+          sliding-window-size: 5             # Looks at the last 5 requests,
+          failure-rate-threshold: 50         # If 50% (3 out of 5) fail, the breaker OPENS
+          wait-duration-in-open-state: 5s   # Waits 5 seconds before transitioning to HALF-OPEN to test the network
+          permitted-number-of-calls-in-half-open-state: 3
+          automatic-transition-from-open-to-half-open-enabled: true
+          record-exceptions:
+            - org.springframework.web.client.ResourceAccessException
+            - org.springframework.web.client.HttpServerErrorException
+          ignore-exceptions:
+            - org.springframework.web.client.HttpClientErrorException
+
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  servers:
+    - url: http://localhost:9000/cart
+      description: Via API Gateway

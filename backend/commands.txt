@@ -1,0 +1,273 @@
+./mvnw -pl catalog-service spring-boot:build-image -DskipTests
+./mvnw -pl cart-service spring-boot:build-image -DskipTests
+./mvnw -pl api-gateway spring-boot:build-image -DskipTests
+
+
+
+
+minikube start --memory 12288 --cpus 6
+minikube addons enable metrics-server
+
+
+kubectl create configmap keycloak-realm-config --from-file=realm.json=deployment/docker-compose/realm-export.json
+
+oc create configmap keycloak-realm-config --from-file=realm.json=realm-export.json
+
+
+kubectl apply -f k8s/
+
+
+
+---------------- AZURE CLI ---------------------
+// Logging into Azure using the Azure CLI. This command will prompt you to authenticate with your Azure account, allowing you to manage your Azure resources from the command line.
+
+1. az login
+
+
+// Register the Microsoft.ContainerService resource provider in your Azure subscription. This is necessary to use Azure Kubernetes Service (AKS) and related features.
+
+2. az provider register --namespace Microsoft.ContainerService
+
+// Creating a resource group in Azure to hold all the resources for the bookstore application. The resource group is a logical container that helps manage and organize related resources in Azure. In this case, we are creating a resource group named "bookstore-rg" in the "uksouth" region.
+
+3. az group create --name bookstore-rg --location swedencentral
+
+
+// Creating a AKS Cluster
+
+3. az aks create --resource-group bookstore-rg --name bookstore-cluster --node-count 2 --node-vm-size Standard_B2s_v2 --enable-cluster-autoscaler --min-count 1 --max-count 4 --generate-ssh-keys
+
+
+// 4. Connecting to the AKS Cluster using kubectl
+
+4. az aks get-credentials --resource-group bookstore-rg --name bookstore-cluster
+
+// 5. Deploying the application to the AKS Cluster using kubectl
+
+a. kubectl apply -f secrets.yml
+b. kubectl apply -f postgres.yml
+c. kubectl rollout status statefulset/postgres --timeout=3m
+
+d. kubectl create configmap keycloak-realm-config --from-file=realm.json=realm-export.json
+
+e. kubectl apply -f keycloak.yml
+f. kubectl rollout status deployment/keycloak --timeout=6m
+g. kubectl apply -f catalog-service.yml
+h. kubectl apply -f cart-service.yml
+i. kubectl apply -f api-gateway.yml
+
+// 6. Verifying the deployment and checking the status of the pods in the AKS Cluster
+kubectl get pods -n bookstore
+kubectl get services -n bookstore
+
+// FOR HPA
+kubectl apply -f hpa.yml
+
+
+
+/// FOR SHUTTING CLUSTER DOWN
+az aks stop --resource-group bookstore-rg --name bookstore-cluster
+
+
+/// FOR STARTING CLUSTER UP
+az aks start --resource-group bookstore-rg --name bookstore-cluster
+
+
+k6 run --duration 3m --vus 50 load-test.js
+
+
+ while ($true) {
+     Invoke-RestMethod http://9.223.64.113:9000/catalog/version
+     Start-Sleep -Seconds 1
+ }
+
+
+
+// ------------------------- AZURE BLOB STORAGE CREATION ------------------
+
+$env:AZURE_RESOURCE_GROUP="bookstore-rg"
+ $env:AZURE_STORAGE_ACCOUNT_NAME="bookstorevelero12"
+ $env:BLOB_CONTAINER="velero-backups"
+ $env:AZURE_REGION="swedencentral"
+ az storage account create --name $AZURE_STORAGE_ACCOUNT_NAME --resource-group $AZURE_RESOURCE_GROUP --location $AZURE_REGION --sku Standard_GRS
+
+
+# CREATE storage account
+
+az storage account create --name bookstorevelero12 --resource-group bookstore-rg --location swedencentral --sku Standard_GRS
+
+# CREATE blob container
+
+az storage container create --name velero-backups --account-name bookstorevelero12
+
+# Get Azure Credentials
+
+az account show --query "{subscriptionId:id, tenantId:tenantId}" -o table
+
+# Create a service principal and assign it "Contributor" role to the storage account
+
+az ad sp create-for-rbac --name "velero-sp" --role "Contributor" --scopes /subscriptions/<subscription-id> --output json
+
+# Create a secret file with the AZURE Credentials
+
+@"
+AZURE_SUBSCRIPTION_ID=<subscription-id> AZURE_TENANT_ID=<tenant-id> AZURE_CLIENT_ID=<client-id> AZURE_CLIENT_SECRET=<> AZURE_RESOURCE_GROUP=<resource-group-name> AZURE_CLOUD_NAME=AzurePublicCloud
+"@ | Out-File -FilePath azure-credentials.txt -Encoding ascii
+
+# Verify
+az account show
+
+# Get storage account name and Rg name
+az storage account list --query "[].{name:name, rg:resourceGroup}" -o table
+
+# Install velero locally
+choco install velero
+
+# Install velero on cluster
+velero install --provider azure --plugins velero/velero-plugin-for-microsoft-azure:v1.11.0 --bucket velero-backups --secret-file ./credentials-velero.txt --backup-location-config resourceGroup=bookstore-rg,storageAccount=bookstorevelero12,storageAccountKeyEnvVar=AZURE_STORAGE_ACCOUNT_ACCESS_KEY --use-volume-snapshots=false --wait
+
+# Verify
+kubectl get pods -n velero
+velero backup-location get
+
+# Create Daily Backup Schedule
+velero schedule create postgres-daily-backup  --schedule="0 2 * * *" --include-namespaces default  --ttl 720h0m0s
+
+# Describe schedule
+velero schedule get
+
+# Take a manual backup
+velero backup create postgres-manual-backup --include-namespaces default --wait
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1. Take velero backup
+
+Syntax : velero backup create <name> --include-namespaces <namespace> --selector <label-selector>
+
+velero backup create postgres-backup --include-namespaces default --selector app=postgres
+
+2. Describe backup
+velero backup describe postgres-backup
+
+3. Delete everythig
+
+kubectl delete statefulset postgres
+kubectl delete pvc postgres-storage-postgres-0
+
+4. Verify
+kubectl get pods
+kubectl get pvc
+kubectl get svc
+
+5. Restore
+
+Syntax : velero restore create <name> --from-backup <backup-name>
+velero restore create postgres-restore --from-backup postgres-backup
+
+6. Describe restore
+velero restore describe postgres-restore
+
+7. Check if everything is back up and running
+kubectl get pods -w
+
+
+// Schedule backup
+velero schedule create postgres-daily-backup --schedule="0 2 * * *" --include-namespaces default --selector app=postgres
+
+// Describe schedule
+
+velero schedule get
+
+
+
+
+
+
+
+
+Traffic spike hits catalog-service
+         │
+         ▼
+    HPA kicks in
+    Adds more PODS (up to 8)
+         │
+         │ if nodes are full...
+         ▼
+    Cluster Autoscaler kicks in
+    Adds more NODES (VMs, up to 4)
+         │
+         ▼
+    New pods get scheduled on new nodes
+         │
+         ▼
+    Traffic handled
+
+
+
+    Internet
+        │
+        ▼
+    9.223.64.113:9000  (api-gateway - LoadBalancer)
+        │
+        ├──► catalog-service:8081  (1→8 pods via HPA)
+        ├──► cart-service:8082
+        │
+        ▼
+    keycloak:9191  (auth)
+    postgres-db:5432  (database)
+
+
+
+    // KEYCLOAK FIX  HTTPS FIX
+
+1. Ingress NGINX Installation
+
+    helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+    helm repo update
+
+    helm install ingress-nginx ingress-nginx/ingress-nginx --namespace ingress-nginx --create-namespace --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-load-balancer-health-probe-request-path"="/healthz"
+
+2. Create TLS secret
+
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 ` -keyout tls.key -out tls.crt ` -subj "/CN=4.225.128.203" ` -addext "subjectAltName=IP:4.225.128.203"
+
+
+3. Create TLS Secrest in kubernetes
+
+kubectl create secret tls bookstore-tls --cert=tls.crt --key=tls.key
+
+
+4.
+kubectl apply -f keycloak.yml
+kubectl apply -f api-gateway.yml
+kubectl apply -f frontend.yml
+kubectl apply -f ingress.yml
+
+5. Open NSG ports for Ingress Controller
+
+az network nsg list --resource-group MC_bookstore-rg_bookstore-cluster_swedencentral --query "[].name" -o table
+
+6.  open port 80
+
+az network nsg rule create --resource-group MC_bookstore-rg_bookstore-cluster_swedencentral --nsg-name aks-agentpool-42188344-nsg --name allow-http --protocol Tcp --direction Inbound --priority 100 --source-address-prefix Internet --destination-port-range 80 --access Allow
+
+7.  open port 443
+az network nsg rule create --resource-group MC_bookstore-rg_bookstore-cluster_swedencentral --nsg-name aks-agentpool-42188344-nsg --name allow-https --protocol Tcp --direction Inbound --priority 101 --source-address-prefix Internet --destination-port-range 443 --access Allow
+
+8. open health probe port
+az network nsg rule create --resource-group MC_bookstore-rg_bookstore-cluster_swedencentral --nsg-name aks-agentpool-42188344-nsg --name allow-ingress-nodeports --protocol Tcp --direction Inbound --priority 102 --source-address-prefix AzureLoadBalancer --destination-port-ranges 30659 32210 --access Allow

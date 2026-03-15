@@ -1,0 +1,77 @@
+---
+# The Service: Opens port 8082 on the internal K8s network
+apiVersion: v1
+kind: Service
+metadata:
+  name: cart-service
+spec:
+  selector:
+    app: cart-service
+  ports:
+    - port: 8082
+      targetPort: 8082
+
+---
+# The Deployment: Manages the Cart Service Pod
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cart-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cart-service
+  template:
+    metadata:
+      labels:
+        app: cart-service
+    spec:
+      containers:
+        - name: cart-service
+          image: paritosh4495/csc8113bookstore-cart-service:latest
+          imagePullPolicy: Always
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "docker"
+            - name: CART_CATALOG_SERVICE_URL
+              value: "http://catalog-service:8081" # Points to the internal K8s Catalog Service
+            - name: DB_URL
+              value: "jdbc:postgresql://postgres-db:5432/cart"
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                    name: postgres-secret
+                    key: username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                    name: postgres-secret
+                    key: password
+            - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
+              value: "https://4.225.128.203/auth/realms/mylabs"
+            - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI
+              value: "http://keycloak:9191/auth/realms/mylabs/protocol/openid-connect/certs"
+          ports:
+            - containerPort: 8082
+          resources:
+            requests:
+              memory: "500Mi"
+              cpu: "250m"
+            limits:
+              memory: "700Mi"
+              cpu: "750m"
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8082
+            initialDelaySeconds: 90
+            periodSeconds: 20
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8082
+            initialDelaySeconds: 60
+            periodSeconds: 15
+            failureThreshold: 3

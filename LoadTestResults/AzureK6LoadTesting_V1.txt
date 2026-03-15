@@ -1,0 +1,143 @@
+------------------------- AZURE K6 LOAD TESTING RESULTS ------------------
+
+
+The results : 
+P:\\Advanced Computer Science (ACS)\\Semester 2\\GroupProject\\Technical_Part\\CSC8113-bookstore-backend>k6 run load-test.js
+
+         /\\      Grafana   /‾‾/
+    /\\  /  \\     |\\  __   /  /
+   /  \\/    \\    | |/ /  /   ‾‾\\
+  /          \\   |   (  |  (‾)  |
+ / __________ \\  |_|\\_\\  \\_____/
+
+
+     execution: local
+        script: load-test.js
+        output: -
+
+     scenarios: (100.00%) 1 scenario, 500 max VUs, 5m30s max duration (incl. graceful stop):
+              * default: Up to 500 looping VUs for 5m0s over 3 stages (gracefulRampDown: 30s, gracefulStop: 30s)
+
+
+
+  █ TOTAL RESULTS
+
+    checks_total.......: 60913  202.368148/s
+    checks_succeeded...: 99.99% 60909 out of 60913
+    checks_failed......: 0.00%  4 out of 60913
+
+    ✗ is status 200
+      ↳  99% — ✓ 60909 / ✗ 4
+
+    HTTP
+    http_req_duration..............: avg=184.51ms min=26.28ms med=123.52ms max=2.76s p(90)=409.57ms p(95)=578.56ms
+      { expected_response:true }...: avg=184.46ms min=26.28ms med=123.5ms  max=2.76s p(90)=409.31ms p(95)=578.54ms
+    http_req_failed................: 0.00%  4 out of 60913
+    http_reqs......................: 60913  202.368148/s
+
+    EXECUTION
+    iteration_duration.............: avg=1.18s    min=1.02s   med=1.12s    max=3.76s p(90)=1.41s    p(95)=1.57s
+    iterations.....................: 60913  202.368148/s
+    vus............................: 1      min=1          max=499
+    vus_max........................: 500    min=500        max=500
+
+    NETWORK
+    data_received..................: 124 MB 411 kB/s
+    data_sent......................: 4.9 MB 16 kB/s
+
+
+
+
+running (5m01.0s), 000/500 VUs, 60913 complete and 0 interrupted iterations
+default ✓ [======================================] 000/500 VUs  5m0s
+
+P:\\Advanced Computer Science (ACS)\\Semester 2\\GroupProject\\Technical_Part\\CSC8113-bookstore-backend>
+
+PS C:\\Windows\\system32> kubectl get hpa -w
+NAME                  REFERENCE                         TARGETS       MINPODS   MAXPODS   REPLICAS   AGE
+catalog-service-hpa   Deployment/catalog-service-blue   cpu: 1%/60%   1         8         5          21m
+catalog-service-hpa   Deployment/catalog-service-blue   cpu: 2%/60%   1         8         5          23m
+catalog-service-hpa   Deployment/catalog-service-blue   cpu: 1%/60%   1         8         5          24m
+catalog-service-hpa   Deployment/catalog-service-blue   cpu: 1%/60%   1         8         5          24m
+catalog-service-hpa   Deployment/catalog-service-blue   cpu: 24%/60%   1         8         1          25m
+catalog-service-hpa   Deployment/catalog-service-blue   cpu: 116%/60%   1         8         1          26m
+catalog-service-hpa   Deployment/catalog-service-blue   cpu: 116%/60%   1         8         2          26m
+catalog-service-hpa   Deployment/catalog-service-blue   cpu: 156%/60%   1         8         2          27m
+catalog-service-hpa   Deployment/catalog-service-blue   cpu: 156%/60%   1         8         3          27m
+catalog-service-hpa   Deployment/catalog-service-blue   cpu: 265%/60%   1         8         3          28m
+catalog-service-hpa   Deployment/catalog-service-blue   cpu: 265%/60%   1         8         5          28m
+catalog-service-hpa   Deployment/catalog-service-blue   cpu: 213%/60%   1         8         5          29m
+catalog-service-hpa   Deployment/catalog-service-blue   cpu: 213%/60%   1         8         8          29m
+catalog-service-hpa   Deployment/catalog-service-blue   cpu: 56%/60%    1         8         8          30m
+
+
+PS P:\\Advanced Computer Science (ACS)\\Semester 2\\GroupProject\\Technical_Part\\CSC8113-bookstore-backend\\backend\\deployment\\k8s> kubectl get pods -w
+NAME                                   READY   STATUS    RESTARTS   AGE
+api-gateway-b7d94d7bf-xxx69            1/1     Running   0          22m
+cart-service-5f888b648b-4tg8q          1/1     Running   0          22m
+catalog-service-blue-6487bd89d-4p8w4   1/1     Running   0          2m50s
+catalog-service-blue-6487bd89d-qlqzq   1/1     Running   0          22m
+catalog-service-blue-6487bd89d-r4vw6   1/1     Running   0          6m50s
+catalog-service-blue-6487bd89d-t2krg   1/1     Running   0          3m50s
+catalog-service-blue-6487bd89d-xjlcw   1/1     Running   0          2m50s
+keycloak-c74957f46-sk6xm               1/1     Running   0          161m
+postgres-0                             1/1     Running   0          161m
+catalog-service-blue-6487bd89d-r4vw6   1/1     Terminating   0          9m46s
+catalog-service-blue-6487bd89d-4p8w4   1/1     Terminating   0          5m46s
+catalog-service-blue-6487bd89d-xjlcw   1/1     Terminating   0          5m46s
+catalog-service-blue-6487bd89d-t2krg   1/1     Terminating   0          6m46s
+catalog-service-blue-6487bd89d-4p8w4   0/1     Error         0          5m46s
+catalog-service-blue-6487bd89d-t2krg   0/1     Error         0          6m46s
+catalog-service-blue-6487bd89d-xjlcw   0/1     Error         0          5m46s
+catalog-service-blue-6487bd89d-4p8w4   0/1     Error         0          5m46s
+catalog-service-blue-6487bd89d-4p8w4   0/1     Error         0          5m46s
+catalog-service-blue-6487bd89d-r4vw6   0/1     Error         0          9m47s
+catalog-service-blue-6487bd89d-t2krg   0/1     Error         0          6m47s
+catalog-service-blue-6487bd89d-t2krg   0/1     Error         0          6m47s
+catalog-service-blue-6487bd89d-xjlcw   0/1     Error         0          5m47s
+catalog-service-blue-6487bd89d-xjlcw   0/1     Error         0          5m47s
+catalog-service-blue-6487bd89d-r4vw6   0/1     Error         0          9m47s
+catalog-service-blue-6487bd89d-r4vw6   0/1     Error         0          9m47s
+catalog-service-blue-6487bd89d-5llm8   0/1     Pending       0          0s
+catalog-service-blue-6487bd89d-5llm8   0/1     Pending       0          0s
+catalog-service-blue-6487bd89d-5llm8   0/1     ContainerCreating   0          0s
+catalog-service-blue-6487bd89d-5llm8   0/1     Running             0          2s
+catalog-service-blue-6487bd89d-z86jt   0/1     Pending             0          0s
+catalog-service-blue-6487bd89d-z86jt   0/1     Pending             0          0s
+catalog-service-blue-6487bd89d-z86jt   0/1     ContainerCreating   0          0s
+catalog-service-blue-6487bd89d-z86jt   0/1     Running             0          2s
+catalog-service-blue-6487bd89d-5llm8   1/1     Running             0          84s
+catalog-service-blue-6487bd89d-g6227   0/1     Pending             0          0s
+catalog-service-blue-6487bd89d-g6227   0/1     Pending             0          0s
+catalog-service-blue-6487bd89d-4qrgx   0/1     Pending             0          0s
+catalog-service-blue-6487bd89d-g6227   0/1     ContainerCreating   0          0s
+catalog-service-blue-6487bd89d-4qrgx   0/1     Pending             0          0s
+catalog-service-blue-6487bd89d-4qrgx   0/1     ContainerCreating   0          0s
+catalog-service-blue-6487bd89d-g6227   0/1     Running             0          2s
+catalog-service-blue-6487bd89d-4qrgx   0/1     Running             0          2s
+catalog-service-blue-6487bd89d-z86jt   1/1     Running             0          84s
+catalog-service-blue-6487bd89d-8l5gm   0/1     Pending             0          0s
+catalog-service-blue-6487bd89d-8l5gm   0/1     Pending             0          0s
+catalog-service-blue-6487bd89d-dsqnn   0/1     Pending             0          0s
+catalog-service-blue-6487bd89d-8l5gm   0/1     ContainerCreating   0          0s
+catalog-service-blue-6487bd89d-dsqnn   0/1     Pending             0          0s
+catalog-service-blue-6487bd89d-sv2xw   0/1     Pending             0          0s
+catalog-service-blue-6487bd89d-sv2xw   0/1     Pending             0          0s
+catalog-service-blue-6487bd89d-dsqnn   0/1     ContainerCreating   0          0s
+catalog-service-blue-6487bd89d-dsqnn   0/1     Running             0          2s
+catalog-service-blue-6487bd89d-8l5gm   0/1     Running             0          2s
+catalog-service-blue-6487bd89d-g6227   1/1     Running             0          70s
+catalog-service-blue-6487bd89d-4qrgx   1/1     Running             0          84s
+catalog-service-blue-6487bd89d-sv2xw   0/1     Pending             0          60s
+catalog-service-blue-6487bd89d-8l5gm   1/1     Running             0          64s
+catalog-service-blue-6487bd89d-dsqnn   1/1     Running             0          64s
+catalog-service-blue-6487bd89d-sv2xw   0/1     Pending             0          72s
+catalog-service-blue-6487bd89d-sv2xw   0/1     Pending             0          78s
+catalog-service-blue-6487bd89d-sv2xw   0/1     ContainerCreating   0          78s
+catalog-service-blue-6487bd89d-sv2xw   0/1     Running             0          90s
+
+
+
+
+
+

@@ -1,0 +1,47 @@
+spring:
+  application:
+    name: catalog-service
+
+  # DATABASE CONFIGURATION #
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/catalog}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_URL:http://localhost:9191}/realms/mylabs
+
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+
+server:
+  port: 8081
+  shutdown: graceful
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  info:
+    git:
+      mode: full
+
+
+catalog:
+  page-size: 10
+
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  servers:
+    - url: http://localhost:9000/catalog
+      description: Via API Gateway

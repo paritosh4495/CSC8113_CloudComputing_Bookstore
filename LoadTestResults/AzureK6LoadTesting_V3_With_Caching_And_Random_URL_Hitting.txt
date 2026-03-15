@@ -1,0 +1,98 @@
+P:\\Advanced Computer Science (ACS)\\Semester 2\\GroupProject\\Technical_Part\\CSC8113-bookstore-backendk6 run load-test.js
+
+         /\\      Grafana   /‾‾/
+    /\\  /  \\     |\\  __   /  /
+   /  \\/    \\    | |/ /  /   ‾‾\\
+  /          \\   |   (  |  (‾)  |
+ / __________ \\  |_|\\_\\  \\_____/
+
+
+     execution: local
+        script: load-test.js
+        output: -
+
+     scenarios: (100.00%) 1 scenario, 500 max VUs, 5m30s max duration (incl. graceful stop):
+              * default: Up to 500 looping VUs for 5m0s over 3 stages (gracefulRampDown: 30s, gracefulStop: 30s)
+
+
+
+  █ TOTAL RESULTS
+
+    checks_total.......: 67846   225.555678/s
+    checks_succeeded...: 100.00% 67846 out of 67846
+    checks_failed......: 0.00%   0 out of 67846
+
+    ✓ is status 200
+
+    HTTP
+    http_req_duration..............: avg=63.31ms min=21.02ms med=51.96ms max=1.77s p(90)=89.91ms p(95)=114.61ms
+      { expected_response:true }...: avg=63.31ms min=21.02ms med=51.96ms max=1.77s p(90)=89.91ms p(95)=114.61ms
+    http_req_failed................: 0.00%  0 out of 67846
+    http_reqs......................: 67846  225.555678/s
+
+    EXECUTION
+    iteration_duration.............: avg=1.06s   min=1.02s   med=1.05s   max=2.77s p(90)=1.09s   p(95)=1.11s
+    iterations.....................: 67846  225.555678/s
+    vus............................: 3      min=2          max=499
+    vus_max........................: 500    min=500        max=500
+
+    NETWORK
+    data_received..................: 77 MB  256 kB/s
+    data_sent......................: 7.1 MB 24 kB/s
+
+
+
+
+running (5m00.8s), 000/500 VUs, 67846 complete and 0 interrupted iterations
+default ✓ [======================================] 000/500 VUs  5m0s
+
+P:\\Advanced Computer Science (ACS)\\Semester 2\\GroupProject\\Technical_Part\\CSC8113-bookstore-backend>
+
+PS C:\\Windows\\system32> kubectl get hpa -w
+NAME                  REFERENCE                         TARGETS       MINPODS   MAXPODS   REPLICAS   AGE
+catalog-service-hpa   Deployment/catalog-service-blue   cpu: 1%/60%   1         8         1          22h
+catalog-service-hpa   Deployment/catalog-service-blue   cpu: 0%/60%   1         8         1          22h
+catalog-service-hpa   Deployment/catalog-service-blue   cpu: 72%/60%   1         8         1          22h
+catalog-service-hpa   Deployment/catalog-service-blue   cpu: 72%/60%   1         8         2          22h
+catalog-service-hpa   Deployment/catalog-service-blue   cpu: 69%/60%   1         8         2          23h
+catalog-service-hpa   Deployment/catalog-service-blue   cpu: 111%/60%   1         8         2          23h
+catalog-service-hpa   Deployment/catalog-service-blue   cpu: 106%/60%   1         8         2          23h
+catalog-service-hpa   Deployment/catalog-service-blue   cpu: 111%/60%   1         8         2          23h
+catalog-service-hpa   Deployment/catalog-service-blue   cpu: 106%/60%   1         8         2          23h
+catalog-service-hpa   Deployment/catalog-service-blue   cpu: 52%/60%    1         8         2          23h
+catalog-service-hpa   Deployment/catalog-service-blue   cpu: 92%/60%    1         8         2          23h
+catalog-service-hpa   Deployment/catalog-service-blue   cpu: 92%/60%    1         8         4          23h
+catalog-service-hpa   Deployment/catalog-service-blue   cpu: 56%/60%    1         8         4          23h
+catalog-service-hpa   Deployment/catalog-service-blue   cpu: 4%/60%     1         8         4          23h
+catalog-service-hpa   Deployment/catalog-service-blue   cpu: 1%/60%     1         8         4          23h
+catalog-service-hpa   Deployment/catalog-service-blue   cpu: 1%/60%     1         8         4          23h
+catalog-service-hpa   Deployment/catalog-service-blue   cpu: 1%/60%     1         8         4          23h
+catalog-service-hpa   Deployment/catalog-service-blue   cpu: 1%/60%     1         8         4          23h
+
+
+
+PS C:\\Windows\\system32> kubectl get pods -w
+NAME                                   READY   STATUS    RESTARTS   AGE
+api-gateway-b7d94d7bf-fzm2p            1/1     Running   0          8h
+cart-service-5f888b648b-wlgxs          1/1     Running   0          8h
+catalog-service-blue-776bb64f8-ql77w   1/1     Running   0          28m
+keycloak-c74957f46-s45sp               1/1     Running   0          8h
+postgres-0                             1/1     Running   0          8h
+catalog-service-blue-776bb64f8-wkbw4   0/1     Pending   0          0s
+catalog-service-blue-776bb64f8-wkbw4   0/1     Pending   0          0s
+catalog-service-blue-776bb64f8-wkbw4   0/1     ContainerCreating   0          0s
+catalog-service-blue-776bb64f8-wkbw4   0/1     Running             0          2s
+catalog-service-blue-776bb64f8-wkbw4   1/1     Running             0          65s
+catalog-service-blue-776bb64f8-dl4wt   0/1     Pending             0          0s
+catalog-service-blue-776bb64f8-dl4wt   0/1     Pending             0          0s
+catalog-service-blue-776bb64f8-dl4wt   0/1     ContainerCreating   0          0s
+catalog-service-blue-776bb64f8-pfm7d   0/1     Pending             0          0s
+catalog-service-blue-776bb64f8-pfm7d   0/1     Pending             0          0s
+catalog-service-blue-776bb64f8-dl4wt   0/1     Running             0          7s
+catalog-service-blue-776bb64f8-pfm7d   0/1     Pending             0          53s
+catalog-service-blue-776bb64f8-pfm7d   0/1     Pending             0          67s
+catalog-service-blue-776bb64f8-dl4wt   1/1     Running             0          69s
+catalog-service-blue-776bb64f8-pfm7d   0/1     Pending             0          75s
+catalog-service-blue-776bb64f8-pfm7d   0/1     ContainerCreating   0          75s
+catalog-service-blue-776bb64f8-pfm7d   0/1     Running             0          87s
+catalog-service-blue-776bb64f8-pfm7d   1/1     Running             0          2m30s

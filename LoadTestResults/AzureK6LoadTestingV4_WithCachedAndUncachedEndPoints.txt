@@ -1,0 +1,82 @@
+P:\\Advanced Computer Science (ACS)\\Semester 2\\GroupProject\\Technical_Part\\CSC8113-bookstore-backend>k6 run load-test.js
+
+         /\\      Grafana   /‾‾/
+    /\\  /  \\     |\\  __   /  /
+   /  \\/    \\    | |/ /  /   ‾‾\\
+  /          \\   |   (  |  (‾)  |
+ / __________ \\  |_|\\_\\  \\_____/
+
+
+     execution: local
+        script: load-test.js
+        output: -
+
+     scenarios: (100.00%) 1 scenario, 500 max VUs, 5m30s max duration (incl. graceful stop):
+              * default: Up to 500 looping VUs for 5m0s over 3 stages (gracefulRampDown: 30s, gracefulStop: 30s)
+
+
+
+  █ TOTAL RESULTS
+
+    checks_total.......: 68005   226.416279/s
+    checks_succeeded...: 100.00% 68005 out of 68005
+    checks_failed......: 0.00%   0 out of 68005
+
+    ✓ search 200
+    ✓ listing 200
+    ✓ genre 200
+    ✓ product 200
+
+    HTTP
+    http_req_duration..............: avg=60.7ms min=24.94ms med=43.96ms max=1.6s  p(90)=57.13ms p(95)=76.03ms
+      { expected_response:true }...: avg=60.7ms min=24.94ms med=43.96ms max=1.6s  p(90)=57.13ms p(95)=76.03ms
+    http_req_failed................: 0.00%  0 out of 68005
+    http_reqs......................: 68005  226.416279/s
+
+    EXECUTION
+    iteration_duration.............: avg=1.06s  min=1.02s   med=1.04s   max=3.11s p(90)=1.05s   p(95)=1.08s
+    iterations.....................: 68005  226.416279/s
+    vus............................: 4      min=2          max=500
+    vus_max........................: 500    min=500        max=500
+
+    NETWORK
+    data_received..................: 119 MB 395 kB/s
+    data_sent......................: 6.4 MB 21 kB/s
+
+
+
+
+running (5m00.4s), 000/500 VUs, 68005 complete and 0 interrupted iterations
+default ✓ [======================================] 000/500 VUs  5m0s
+
+P:\\Advanced Compute
+PS P:\\Advanced Computer Science (ACS)\\Semester 2\\GroupProject\\Technical_Part\\CSC8113-bookstore-backend\\backend\\deployment\\k8s> kubectl get pods -w
+NAME                                    READY   STATUS    RESTARTS   AGE
+api-gateway-b7d94d7bf-889gp             1/1     Running   0          12h
+cart-service-5f888b648b-9zwpr           1/1     Running   0          12h
+catalog-service-blue-697885c545-zldmd   1/1     Running   0          22m
+keycloak-c74957f46-slt95                1/1     Running   0          12h
+postgres-0                              1/1     Running   0          12h
+catalog-service-blue-697885c545-7jmwx   0/1     Pending   0          0s
+catalog-service-blue-697885c545-7jmwx   0/1     Pending   0          0s
+catalog-service-blue-697885c545-7jmwx   0/1     ContainerCreating   0          0s
+catalog-service-blue-697885c545-7jmwx   0/1     Running             0          1s
+catalog-service-blue-697885c545-7jmwx   1/1     Running             0          63s
+
+
+
+PS C:\\Windows\\system32> kubectl get hpa -w
+NAME                  REFERENCE                         TARGETS       MINPODS   MAXPODS   REPLICAS   AGE
+catalog-service-hpa   Deployment/catalog-service-blue   cpu: 0%/60%   1         8         1          35h
+catalog-service-hpa   Deployment/catalog-service-blue   cpu: 0%/60%   1         8         1          35h
+catalog-service-hpa   Deployment/catalog-service-blue   cpu: 0%/60%   1         8         1          35h
+catalog-service-hpa   Deployment/catalog-service-blue   cpu: 15%/60%   1         8         1          35h
+catalog-service-hpa   Deployment/catalog-service-blue   cpu: 19%/60%   1         8         1          35h
+catalog-service-hpa   Deployment/catalog-service-blue   cpu: 30%/60%   1         8         1          35h
+catalog-service-hpa   Deployment/catalog-service-blue   cpu: 52%/60%   1         8         1          35h
+catalog-service-hpa   Deployment/catalog-service-blue   cpu: 76%/60%   1         8         1          35h
+catalog-service-hpa   Deployment/catalog-service-blue   cpu: 76%/60%   1         8         2          35h
+catalog-service-hpa   Deployment/catalog-service-blue   cpu: 80%/60%   1         8         2          35h
+catalog-service-hpa   Deployment/catalog-service-blue   cpu: 8%/60%    1         8         2          35h
+
+

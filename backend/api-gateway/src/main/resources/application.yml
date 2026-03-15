@@ -1,0 +1,107 @@
+server:
+  port: 9000
+  shutdown: graceful
+
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: "*"
+    info:
+      git:
+        mode: full
+
+spring:
+  application:
+    name: api-gateway
+
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_URL:http://localhost:9191}/realms/mylabs
+
+  cloud:
+    gateway:
+      server:
+        webflux:
+          globalcors:
+            cors-configurations:
+              "[/**]":
+                  allowedOriginPatterns: "*"
+                  allowedMethods: "*"
+                  allowedHeaders: "*"
+                  allowCredentials: true
+
+
+          routes:
+            - id: catalog-service
+              uri: ${CATALOG_SERVICE_URL:http://localhost:8081}
+              predicates:
+                - Path=/catalog/**
+              filters:
+                - RewritePath=/catalog?(?<segment>.*), /api/products${segment}
+
+            - id: cart-service
+              uri: ${CART_SERVICE_URL:http://localhost:8082}
+              predicates:
+                - Path=/cart/**
+              filters:
+                - RewritePath=/cart?(?<segment>.*), /api/carts${segment}
+
+            - id: openapi-catalog
+              uri: ${CATALOG_SERVICE_URL:http://localhost:8081}
+              predicates:
+                - Path=/v3/api-docs/catalog
+              filters:
+                - RewritePath=/v3/api-docs/catalog, /v3/api-docs
+
+            - id: openapi-cart
+              uri: ${CART_SERVICE_URL:http://localhost:8082}
+              predicates:
+                - Path=/v3/api-docs/cart
+              filters:
+                - RewritePath=/v3/api-docs/cart, /v3/api-docs
+
+            - id: frontend-route
+              uri: ${FRONTEND_URL:http://localhost:80}
+              predicates:
+                - Path=/**
+              order: 100
+
+          default-filters:
+            - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Methods Access-Control-Allow-Headers RETAIN_FIRST
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  metrics:
+    tags:
+      application: ${spring.application.name}
+  tracing:
+    enabled: false
+    sampling:
+      probability: 1.0
+
+
+springdoc:
+  swagger-ui:
+    use-root-path: false
+    path: /swagger-ui
+    urls:
+      - name: Catalog API (Public)
+        url: /v3/api-docs/catalog
+      - name: Cart API (Protected)
+        url: /v3/api-docs/cart
+
+
+
+
+logging:
+  level:
+    org.springframework.security: TRACE
+    org.springframework.security.oauth2: TRACE
+    org.springframework.cloud.gateway: DEBUG

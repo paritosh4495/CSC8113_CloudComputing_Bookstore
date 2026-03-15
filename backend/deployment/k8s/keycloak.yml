@@ -1,0 +1,88 @@
+---
+# 1. The Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: keycloak
+spec:
+  selector:
+    app: keycloak
+  ports:
+    - port: 9191
+      targetPort: 9191
+
+---
+# 2. The Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keycloak
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: keycloak
+  template:
+    metadata:
+      labels:
+        app: keycloak
+    spec:
+      containers:
+        - name: keycloak
+          image: quay.io/keycloak/keycloak:26.5.0
+          args:
+            - "start-dev"
+            - "--http-port=9191"
+            - "--import-realm"
+            - "--http-relative-path=/auth"
+          env:
+            - name: KEYCLOAK_ADMIN
+              value: "admin"
+            - name: KEYCLOAK_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-secret
+                  key: admin-password
+            - name: KC_DB
+              value: "postgres"
+            - name: KC_DB_URL
+              value: "jdbc:postgresql://postgres-db:5432/keycloak"
+            - name: KC_DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: username
+            - name: KC_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: password
+            - name: KC_HTTP_ENABLED
+              value: "true"
+            - name: KC_HOSTNAME_STRICT
+              value: "false"
+            - name: KC_PROXY_HEADERS
+              value: "xforwarded"
+            - name: KC_HOSTNAME
+              value: "4.225.128.203"
+            - name: KC_HOSTNAME_PATH
+              value: "/auth"
+            - name: KC_HOSTNAME_BACKCHANNEL_DYNAMIC
+              value: "false"
+          ports:
+            - containerPort: 9191
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "1Gi"
+              cpu: "1000m"
+          volumeMounts:
+            - name: realm-volume
+              mountPath: /opt/keycloak/data/import/realm.json
+              subPath: realm.json
+      volumes:
+        - name: realm-volume
+          configMap:
+            name: keycloak-realm-config

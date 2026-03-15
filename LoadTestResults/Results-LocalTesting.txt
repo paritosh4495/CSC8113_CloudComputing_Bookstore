@@ -1,0 +1,123 @@
+PS P:\Advanced Computer Science (ACS)\Semester 2\GroupProject\Technical_Part\CSC8113-bookstore-backend\backend\deployment\k8s> kubectl get hpa -w
+NAME                  REFERENCE                    TARGETS       MINPODS   MAXPODS   REPLICAS   AGE
+catalog-service-hpa   Deployment/catalog-service   cpu: 1%/60%   1         8         1          9m58s
+catalog-service-hpa   Deployment/catalog-service   cpu: 73%/60%   1         8         1          12m
+catalog-service-hpa   Deployment/catalog-service   cpu: 73%/60%   1         8         2          13m
+catalog-service-hpa   Deployment/catalog-service   cpu: 222%/60%   1         8         2          13m
+catalog-service-hpa   Deployment/catalog-service   cpu: 222%/60%   1         8         4          14m
+catalog-service-hpa   Deployment/catalog-service   cpu: 99%/60%    1         8         4          14m
+catalog-service-hpa   Deployment/catalog-service   cpu: 62%/60%    1         8         4          15m
+catalog-service-hpa   Deployment/catalog-service   cpu: 100%/60%   1         8         4          16m
+catalog-service-hpa   Deployment/catalog-service   cpu: 100%/60%   1         8         7          17m
+catalog-service-hpa   Deployment/catalog-service   cpu: 51%/60%    1         8         7          17m
+catalog-service-hpa   Deployment/catalog-service   cpu: 1%/60%     1         8         7          18m
+catalog-service-hpa   Deployment/catalog-service   cpu: 1%/60%     1         8         7          21m
+catalog-service-hpa   Deployment/catalog-service   cpu: 1%/60%     1         8         7          25m
+catalog-service-hpa   Deployment/catalog-service   cpu: 0%/60%     1         8         4          25m
+catalog-service-hpa   Deployment/catalog-service   cpu: 0%/60%     1         8         4          26m
+catalog-service-hpa   Deployment/catalog-service   cpu: 1%/60%     1         8         1          26m
+catalog-service-hpa   Deployment/catalog-service   cpu: 2%/60%     1         8         1          27m
+catalog-service-hpa   Deployment/catalog-service   cpu: 1%/60%     1         8         1          28m
+
+
+
+
+
+C:\Users\parit>kubectl get pods -w
+NAME                               READY   STATUS    RESTARTS   AGE
+api-gateway-565f66649-z5zl8        1/1     Running   0          131m
+cart-service-b7c65cdbf-dfmqb       1/1     Running   0          132m
+catalog-service-799d78c9fb-6rvpn   1/1     Running   0          13m
+keycloak-6cc986c8cd-gvtpn          1/1     Running   0          140m
+postgres-0                         1/1     Running   0          144m
+catalog-service-799d78c9fb-jcbpm   0/1     Pending   0          0s
+catalog-service-799d78c9fb-jcbpm   0/1     Pending   0          0s
+catalog-service-799d78c9fb-jcbpm   0/1     ContainerCreating   0          0s
+catalog-service-799d78c9fb-jcbpm   1/1     Running             0          3s
+catalog-service-799d78c9fb-t776d   0/1     Pending             0          0s
+catalog-service-799d78c9fb-t776d   0/1     Pending             0          0s
+catalog-service-799d78c9fb-gt92f   0/1     Pending             0          0s
+catalog-service-799d78c9fb-gt92f   0/1     Pending             0          0s
+catalog-service-799d78c9fb-t776d   0/1     ContainerCreating   0          0s
+catalog-service-799d78c9fb-gt92f   0/1     ContainerCreating   0          0s
+catalog-service-799d78c9fb-gt92f   1/1     Running             0          2s
+catalog-service-799d78c9fb-t776d   1/1     Running             0          3s
+catalog-service-799d78c9fb-m42nb   0/1     Pending             0          0s
+catalog-service-799d78c9fb-m42nb   0/1     Pending             0          0s
+catalog-service-799d78c9fb-qbmqx   0/1     Pending             0          0s
+catalog-service-799d78c9fb-s8qmk   0/1     Pending             0          0s
+catalog-service-799d78c9fb-qbmqx   0/1     Pending             0          0s
+catalog-service-799d78c9fb-s8qmk   0/1     Pending             0          0s
+catalog-service-799d78c9fb-m42nb   0/1     ContainerCreating   0          0s
+catalog-service-799d78c9fb-qbmqx   0/1     ContainerCreating   0          0s
+catalog-service-799d78c9fb-s8qmk   0/1     ContainerCreating   0          0s
+catalog-service-799d78c9fb-qbmqx   1/1     Running             0          2s
+catalog-service-799d78c9fb-s8qmk   1/1     Running             0          3s
+catalog-service-799d78c9fb-m42nb   1/1     Running             0          4s
+catalog-service-799d78c9fb-s8qmk   1/1     Terminating         0          8m37s
+catalog-service-799d78c9fb-qbmqx   1/1     Terminating         0          8m37s
+catalog-service-799d78c9fb-m42nb   1/1     Terminating         0          8m37s
+catalog-service-799d78c9fb-s8qmk   1/1     Terminating         0          8m37s
+catalog-service-799d78c9fb-m42nb   1/1     Terminating         0          8m37s
+catalog-service-799d78c9fb-qbmqx   1/1     Terminating         0          8m37s
+catalog-service-799d78c9fb-qbmqx   0/1     Error               0          8m38s
+catalog-service-799d78c9fb-m42nb   0/1     Error               0          8m38s
+catalog-service-799d78c9fb-s8qmk   0/1     Error               0          8m38s
+catalog-service-799d78c9fb-qbmqx   0/1     Error               0          8m38s
+catalog-service-799d78c9fb-qbmqx   0/1     Error               0          8m38s
+catalog-service-799d78c9fb-m42nb   0/1     Error               0          8m39s
+catalog-service-799d78c9fb-m42nb   0/1     Error               0          8m39s
+catalog-service-799d78c9fb-m42nb   0/1     Error               0          8m39s
+catalog-service-799d78c9fb-s8qmk   0/1     Error               0          8m39s
+catalog-service-799d78c9fb-s8qmk   0/1     Error               0          8m39s
+
+
+
+
+
+
+
+
+
+
+
+
+
+     execution: local
+        script: load-test.js
+        output: -
+
+     scenarios: (100.00%) 1 scenario, 500 max VUs, 5m30s max duration (incl. graceful stop):
+              * default: Up to 500 looping VUs for 5m0s over 3 stages (gracefulRampDown: 30s, gracefulStop: 30s)
+
+
+
+  █ TOTAL RESULTS
+
+    checks_total.......: 46351   154.146983/s
+    checks_succeeded...: 100.00% 46351 out of 46351
+    checks_failed......: 0.00%   0 out of 46351
+
+    ✓ is status 200
+
+    HTTP
+    http_req_duration..............: avg=571.59ms min=847.6µs med=9.82ms max=27.19s p(90)=2.2s p(95)=4.69s
+      { expected_response:true }...: avg=571.59ms min=847.6µs med=9.82ms max=27.19s p(90)=2.2s p(95)=4.69s
+    http_req_failed................: 0.00%  0 out of 46351
+    http_reqs......................: 46351  154.146983/s
+
+    EXECUTION
+    iteration_duration.............: avg=1.57s    min=1s      med=1.01s  max=28.19s p(90)=3.2s p(95)=5.69s
+    iterations.....................: 46351  154.146983/s
+    vus............................: 4      min=2          max=500
+    vus_max........................: 500    min=500        max=500
+
+    NETWORK
+    data_received..................: 89 MB  295 kB/s
+    data_sent......................: 3.8 MB 13 kB/s
+
+
+
+
+running (5m00.7s), 000/500 VUs, 46351 complete and 0 interrupted iterations
+default ✓ [======================================] 000/500 VUs  5m0s

@@ -1,0 +1,96 @@
+BLUE 2026-03-12T15:16:13.598736675Z
+blue  v1.0 - BLUE 2026-03-12T15:16:14.654610854Z
+blue  v1.0 - BLUE 2026-03-12T15:16:15.713135649Z
+blue  v1.0 - BLUE 2026-03-12T15:16:16.770559988Z
+blue  v1.0 - BLUE 2026-03-12T15:16:17.820814630Z
+blue  v1.0 - BLUE 2026-03-12T15:16:18.868085063Z
+blue  v1.0 - BLUE 2026-03-12T15:16:19.918309409Z
+blue  v1.0 - BLUE 2026-03-12T15:16:20.964825735Z
+GREEN v2.0 - G... 2026-03-12T15:16:22.071680191Z
+GREEN v2.0 - G... 2026-03-12T15:16:23.147686193Z
+GREEN v2.0 - G... 2026-03-12T15:16:24.206731697Z
+GREEN v2.0 - G... 2026-03-12T15:16:25.264370520Z
+GREEN v2.0 - G... 2026-03-12T15:16:26.317525527Z
+GREEN v2.0 - G... 2026-03-12T15:16:27.374852566Z
+GREEN v2.0 - G... 2026-03-12T15:16:28.435757548Z
+GREEN v2.0 - G... 2026-03-12T15:16:29.493111463Z
+
+
+P:\\Advanced Computer Science (ACS)\\Semester 2\\GroupProject\\Technical_Part\\CSC8113-bookstore-backend>k6 run --duration 3m --vus 50 load-test.js
+
+         /\\      Grafana   /‾‾/
+    /\\  /  \\     |\\  __   /  /
+   /  \\/    \\    | |/ /  /   ‾‾\\
+  /          \\   |   (  |  (‾)  |
+ / __________ \\  |_|\\_\\  \\_____/
+
+
+     execution: local
+        script: load-test.js
+        output: -
+
+     scenarios: (100.00%) 1 scenario, 50 max VUs, 3m30s max duration (incl. graceful stop):
+              * default: 50 looping VUs for 3m0s (gracefulStop: 30s)
+
+
+
+  █ TOTAL RESULTS
+
+    checks_total.......: 8403    46.455498/s
+    checks_succeeded...: 100.00% 8403 out of 8403
+    checks_failed......: 0.00%   0 out of 8403
+
+    ✓ product 200
+    ✓ listing 200
+    ✓ search 200
+    ✓ genre 200
+
+    HTTP
+    http_req_duration..............: avg=73.42ms min=31.45ms med=47.76ms max=2.57s p(90)=75.58ms p(95)=111.77ms
+      { expected_response:true }...: avg=73.42ms min=31.45ms med=47.76ms max=2.57s p(90)=75.58ms p(95)=111.77ms
+    http_req_failed................: 0.00%  0 out of 8403
+    http_reqs......................: 8403   46.455498/s
+
+    EXECUTION
+    iteration_duration.............: avg=1.07s   min=1.03s   med=1.04s   max=3.61s p(90)=1.07s   p(95)=1.11s
+    iterations.....................: 8403   46.455498/s
+    vus............................: 50     min=50        max=50
+    vus_max........................: 50     min=50        max=50
+
+    NETWORK
+    data_received..................: 15 MB  81 kB/s
+    data_sent......................: 796 kB 4.4 kB/s
+
+
+
+
+running (3m00.9s), 00/50 VUs, 8403 complete and 0 interrupted iterations
+default ✓ [======================================] 50 VUs  3m0s
+
+P:\\Advanced Computer Science (ACS)\\Semester 2\\GroupProject\\Technical_Part\\CSC8113-bookstore-backend>
+
+PS P:\\Advanced Computer Science (ACS)\\Semester 2\\GroupProject\\Technical_Part\\CSC8113-bookstore-backend\\backend\\deployment\\k8s> kubectl get pods -w
+NAME                                     READY   STATUS    RESTARTS   AGE
+api-gateway-b7d94d7bf-m5nnd              1/1     Running   0          21m
+cart-service-5f888b648b-42czg            1/1     Running   0          21m
+catalog-service-blue-56bdcb4fbb-lmxvt    1/1     Running   0          9m36s
+catalog-service-green-684b4895dc-n8ff8   1/1     Running   0          2m7s
+keycloak-c74957f46-8dzzr                 1/1     Running   0          135m
+postgres-0                               1/1     Running   0          135m
+PS P:\\Advanced Computer Science (ACS)\\Semester 2\\GroupProject\\Technical_Part\\CSC8113-bookstore-backend\\backend\\deployment\\k8s> kubectl apply -f catalog-service.yml
+service/catalog-service configured
+deployment.apps/catalog-service-blue configured
+PS P:\\Advanced Computer Science (ACS)\\Semester 2\\GroupProject\\Technical_Part\\CSC8113-bookstore-backend\\backend\\deployment\\k8s> kubectl get pods -w
+NAME                                     READY   STATUS    RESTARTS   AGE
+api-gateway-b7d94d7bf-m5nnd              1/1     Running   0          21m
+cart-service-5f888b648b-42czg            1/1     Running   0          21m
+catalog-service-blue-56bdcb4fbb-lmxvt    1/1     Running   0          10m
+catalog-service-green-684b4895dc-n8ff8   1/1     Running   0          2m42s
+keycloak-c74957f46-8dzzr                 1/1     Running   0          135m
+postgres-0                               1/1     Running   0          135m
+catalog-service-blue-56bdcb4fbb-x2cpr    0/1     Pending   0          0s
+catalog-service-blue-56bdcb4fbb-x2cpr    0/1     Pending   0          0s
+catalog-service-blue-56bdcb4fbb-x2cpr    0/1     ContainerCreating   0          0s
+catalog-service-blue-56bdcb4fbb-x2cpr    0/1     Running             0          4s
+catalog-service-blue-56bdcb4fbb-x2cpr    1/1     Running             0          66s
+PS P:\\Advanced Computer Science (ACS)\\Semester 2\\GroupProject\\Technical_Part\\CSC8113-bookstore-backend\\backend\\deployment\\k8s>

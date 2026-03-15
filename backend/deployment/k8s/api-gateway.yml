@@ -1,0 +1,56 @@
+---
+# The Service: ClusterIP - accessed via Ingress
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-gateway
+spec:
+  selector:
+    app: api-gateway
+  ports:
+    - port: 9000
+      targetPort: 9000
+
+---
+# The Deployment: Manages the API Gateway Pod
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-gateway
+  template:
+    metadata:
+      labels:
+        app: api-gateway
+    spec:
+      containers:
+        - name: api-gateway
+          image: paritosh4495/csc8113bookstore-api-gateway:latest
+          imagePullPolicy: Always
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "docker"
+            - name: CATALOG_SERVICE_URL
+              value: "http://catalog-service:8081"
+            - name: CART_SERVICE_URL
+              value: "http://cart-service:8082"
+            - name: FRONTEND_URL
+              value: "http://frontend:80"
+            - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
+              value: "https://4.225.128.203/auth/realms/mylabs"
+            - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI
+              value: "http://keycloak:9191/auth/realms/mylabs/protocol/openid-connect/certs"
+
+          ports:
+            - containerPort: 9000
+          resources:
+            requests:
+              memory: "500Mi"
+              cpu: "250m"
+            limits:
+              memory: "700Mi"
+              cpu: "500m"
