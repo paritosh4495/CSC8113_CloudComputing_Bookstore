@@ -3,17 +3,36 @@ import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 
 const STATUS_CONFIG = {
-  AVAILABLE:    { label: "Available",    color: "#15803d", bg: "#dcfce7", dot: "#22c55e" },
-  OUT_OF_STOCK: { label: "Out of Stock", color: "#b45309", bg: "#fef9c3", dot: "#f59e0b" },
-  DISCONTINUED: { label: "Discontinued", color: "#6b7280", bg: "#f3f4f6", dot: "#9ca3af" },
+  AVAILABLE: {
+    label: "Available",
+    color: "#15803d",
+    bg: "#dcfce7",
+    dot: "#22c55e",
+  },
+  OUT_OF_STOCK: {
+    label: "Out of Stock",
+    color: "#b45309",
+    bg: "#fef9c3",
+    dot: "#f59e0b",
+  },
+  DISCONTINUED: {
+    label: "Discontinued",
+    color: "#6b7280",
+    bg: "#f3f4f6",
+    dot: "#9ca3af",
+  },
 };
 
 export default function BookCard({ book }) {
   const { addItem } = useCart();
   const [added, setAdded] = useState(false);
 
-  const isAvailable = book.status === "AVAILABLE";
-  const status = STATUS_CONFIG[book.status] || STATUS_CONFIG.DISCONTINUED;
+  const derivedStatus =
+    book.status === "AVAILABLE" && book.stockQuantity <= 0
+      ? "OUT_OF_STOCK"
+      : book.status;
+  const isAvailable = derivedStatus === "AVAILABLE";
+  const status = STATUS_CONFIG[derivedStatus] || STATUS_CONFIG.DISCONTINUED; // <-- Fixed!
 
   function handleAddToCart(e) {
     e.preventDefault();
@@ -48,7 +67,10 @@ export default function BookCard({ book }) {
             className="availability-pill"
             style={{ background: status.bg, color: status.color }}
           >
-            <span className="availability-dot" style={{ background: status.dot }} />
+            <span
+              className="availability-dot"
+              style={{ background: status.dot }}
+            />
             {status.label}
           </span>
         </div>
