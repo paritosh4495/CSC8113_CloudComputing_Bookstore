@@ -35,7 +35,7 @@ spec:
                   name: postgres-secret
                   key: password
             - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
-              value: "http://keycloak:9191/realms/mylabs"
+              value: "http://51.12.134.170:9191/realms/mylabs"
             - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI
               value: "http://keycloak:9191/realms/mylabs/protocol/openid-connect/certs"
           ports:

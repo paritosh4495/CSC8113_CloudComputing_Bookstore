@@ -10,6 +10,8 @@ spec:
   ports:
     - port: 9191
       targetPort: 9191
+  type: LoadBalancer
+
 
 ---
 # 2. The Deployment: Manages the Keycloak Pod
