@@ -3,11 +3,17 @@ name: Cart Service CI/CD Pipeline
 
 
 on:
-    push:
-        paths:
-          - backend/cart-service/**
-        branches:
-          - "**"
+  push:
+    branches:
+      - main
+    paths:
+      - backend/cart-service/**
+  pull_request:
+    branches:
+      - main
+    paths:
+      - backend/cart-service/**
+
 
 jobs:
   build:
@@ -33,14 +39,14 @@ jobs:
           chmod +x ../mvnw
           ../mvnw -ntp verify
 
-      - if: ${{ github.ref == 'refs/heads/backend' }}
+      - if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
         name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - if: ${{ github.ref == 'refs/heads/backend' }}
+      - if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
         name: Build and Push Docker Image
         run: |
           
