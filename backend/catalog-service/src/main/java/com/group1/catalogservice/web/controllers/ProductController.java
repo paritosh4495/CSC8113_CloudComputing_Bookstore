@@ -141,20 +141,20 @@ public class ProductController {
 
     @GetMapping("/version")
     public ResponseEntity<Map<String,String>> getVersion() {
-//        Map<String,String> info = new HashMap<>();
-//        info.put("version", "v1.0 - BLUE");
-//        info.put("color", "blue");
-//        info.put("timestamp", Instant.now().toString());
-//        return ResponseEntity.ok(info);
+        Map<String,String> info = new HashMap<>();
+        info.put("version", "v1.0 - BLUE");
+        info.put("color", "blue");
+        info.put("timestamp", Instant.now().toString());
+        return ResponseEntity.ok(info);
 
 
         // Green deployment
 
-        Map<String,String> info = new HashMap<>();
-        info.put("version", "v2.0 - GREEN");
-        info.put("color", "GREEN");
-        info.put("timestamp", Instant.now().toString());
-        return ResponseEntity.ok(info);
+//        Map<String,String> info = new HashMap<>();
+//        info.put("version", "v2.0 - GREEN");
+//        info.put("color", "GREEN");
+//        info.put("timestamp", Instant.now().toString());
+//        return ResponseEntity.ok(info);
 
 
     }
