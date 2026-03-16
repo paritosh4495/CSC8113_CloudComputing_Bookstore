@@ -17,7 +17,7 @@ spec:
       containers:
         - name: catalog-service
           # Update the image tag below to the latest commit hash from the docker hub registry
-          image: paritosh4495/csc8113bookstore-catalog-service:ce09212
+          image: paritosh4495/csc8113bookstore-catalog-service:ab2a2e4
           imagePullPolicy: Always
           env:
             - name: SPRING_PROFILES_ACTIVE
