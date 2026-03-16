@@ -1,5 +1,4 @@
 ---
-# The Service: Opens port 8082 on the internal K8s network
 apiVersion: v1
 kind: Service
 metadata:
@@ -12,7 +11,6 @@ spec:
       targetPort: 8082
 
 ---
-# The Deployment: Manages the Cart Service Pod
 apiVersion: apps/v1
 kind: Deployment
 metadata:

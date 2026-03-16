@@ -1,5 +1,4 @@
 ---
-# 1. The ConfigMap: Holds  initialization script
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -12,7 +11,6 @@ data:
 
 
 ---
-# 3. The Service: The internal network address for the database
 apiVersion: v1
 kind: Service
 metadata:
@@ -25,7 +23,6 @@ spec:
       targetPort: 5432
 
 ---
-# 4. The StatefulSet: Manages the actual Database Pod
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:

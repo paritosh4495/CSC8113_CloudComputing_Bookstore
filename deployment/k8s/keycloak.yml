@@ -1,5 +1,5 @@
 ---
-# 1. The Service
+
 apiVersion: v1
 kind: Service
 metadata:
@@ -12,7 +12,7 @@ spec:
       targetPort: 9191
 
 ---
-# 2. The Deployment
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
