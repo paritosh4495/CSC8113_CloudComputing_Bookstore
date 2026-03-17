@@ -30,7 +30,7 @@ class ProductServiceImpl implements ProductService {
 
     @Override
 
-    @Cacheable(value = "products", key = "#pageNo")
+//    @Cacheable(value = "products", key = "#pageNo")
     public PageResult<ProductShortResponseDTO> getAllProducts(int pageNo) {
         Sort sort = Sort.by("name").ascending();
         pageNo = pageNo <= 1 ? 0 : pageNo - 1;
