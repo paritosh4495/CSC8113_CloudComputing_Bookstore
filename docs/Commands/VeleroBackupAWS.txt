@@ -66,3 +66,71 @@ velero restore create --from-backup postgres-backup-manual --wait
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Steps :
+
+1. Show the schedules
+-> velero schedule get
+
+2. Show the backups
+-> velero backup get
+-> Show the backup in AWS S3 bucket as well
+
+// Start the Disaster
+3. Delete the StatefulSet (which inturn deletes the pod automatically) and PVC
+-> kubectl get statefulset
+-> kubectl get pvc
+-> kubectl delete statefulset postgres
+-> kubectl delete pvc postgres-storage-postgres-0
+
+// Show the data is vanished
+-> FRONT END : HIT THE ENDPOINT
+
+// Start the Recover process
+-> velero backup get
+-> velero restore create --from-backup <NameOfTheBackup> --wait
+
+// Show the restore is successful
+-> kubectl get pods -w
+-> kubectl get statefulset
+-> kubectl get pvc
+
+// Show the data is back
+-> FRONT END : HIT THE ENDPOINT
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

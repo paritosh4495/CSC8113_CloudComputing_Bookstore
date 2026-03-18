@@ -20,7 +20,7 @@ const KEYWORDS = ['the', 'art', 'war', 'game', 'dark', 'great', 'lost', 'shadow'
 
 // Cached End Points
 function browseBooks() {
-    const page = Math.floor(Math.random() * 5) + 1;
+    const page = Math.floor(Math.random() * 5) + 1; // Randomly select a page between 1 and 5
     return http.get(`${BASE_URL}?page=${page}`);
 }
 
