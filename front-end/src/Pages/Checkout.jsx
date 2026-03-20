@@ -114,7 +114,6 @@ export default function Checkout() {
     pin:        "",
   });
 
-  // ── Not logged in ─────────────────────────────────────────────────────────
   if (!user) {
     return (
       <div className="page-shell">
@@ -148,7 +147,6 @@ export default function Checkout() {
     );
   }
 
-  // ── Order success ─────────────────────────────────────────────────────────
   if (orderDone) {
     return (
       <div className="page-shell">
@@ -187,7 +185,6 @@ export default function Checkout() {
     );
   }
 
-  // ── Step 0: Delivery ──────────────────────────────────────────────────────
   function DeliveryStep() {
     const set   = (k) => (e) => setDelivery((d) => ({ ...d, [k]: e.target.value }));
     const valid = delivery.fullName && delivery.email && delivery.address && delivery.city && delivery.postcode;
@@ -291,7 +288,6 @@ function PaymentStep() {
 
 
 
-  // ── Step 2: Confirm ───────────────────────────────────────────────────────
   function ConfirmStep() {
     function Row({ label, value }) {
       return (
@@ -406,7 +402,6 @@ function PaymentStep() {
     );
   }
 
-  // ── Main layout ───────────────────────────────────────────────────────────
   return (
     <div className="page-shell">
       <div className="container">

@@ -81,7 +81,6 @@ export default function Cart() {
     if (user) fetchCart();
   }, [user]);
 
-  // ── Not logged in ────────────────────────────────
   if (!user) {
     return (
       <div className="page-shell">
@@ -111,7 +110,6 @@ export default function Cart() {
     );
   }
 
-  // ── Loading ──────────────────────────────────────
   if (loading && !cart) {
     return (
       <div className="page-shell">
@@ -131,7 +129,6 @@ export default function Cart() {
     );
   }
 
-  // ── Error ────────────────────────────────────────
   if (error) {
     return (
       <div className="page-shell">
@@ -163,7 +160,6 @@ export default function Cart() {
   const items = cart?.items || [];
   const isEmpty = items.length === 0;
 
-  // ── Empty cart ───────────────────────────────────
   if (isEmpty) {
     return (
       <div className="page-shell">
@@ -193,7 +189,6 @@ export default function Cart() {
     );
   }
 
-  // ── Cart with items ──────────────────────────────
   return (
     <div className="page-shell">
       <div className="container">
