@@ -29,7 +29,7 @@
     <properties>
         <java.version>21</java.version>
         <spring-cloud.version>2025.0.1</spring-cloud.version>
-        <dockerImageName>paritosh4495/csc8113bookstore-${project.artifactId}</dockerImageName>
+        <dockerImageName>karthi6559/bookstoreapp-${project.artifactId}</dockerImageName>
     </properties>
     <dependencies>
         <dependency>

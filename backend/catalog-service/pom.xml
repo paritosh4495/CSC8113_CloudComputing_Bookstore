@@ -29,7 +29,7 @@
     <properties>
         <java.version>21</java.version>
         <org.mapstruct.version>1.6.3</org.mapstruct.version>
-        <dockerImageName>paritosh4495/csc8113bookstore-${project.artifactId}</dockerImageName>
+        <dockerImageName>karthi6559/bookstoreapp-${project.artifactId}</dockerImageName>
     </properties>
     <dependencies>
         <dependency>
